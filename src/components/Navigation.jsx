@@ -14,7 +14,7 @@ const Navigation = () => {
     }
 
     const menuActive = (path) => {
-        return location.pathname === path ? 'active' : '';
+        return location.pathname.includes(path) ? 'active' : '';
     };
 
     return (
@@ -27,14 +27,14 @@ const Navigation = () => {
                 <ul className="sidebar-menu-list">
                     <li className="menu-title pt-0">MENU</li>
 
-                    <li className={`sidebar-menu-list__item ${menuActive('/dashboard')}`}>
-                        <Link to="/dashboard" className="sidebar-menu-list__link">
+                    <li className={`sidebar-menu-list__item ${menuActive('/welcome')}`}>
+                        <Link to="/dashboard/welcome" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-landmark"></i></span>
                             <span className="text">Dashboard</span>
                         </Link>
                     </li>
 
-                    <li className={`sidebar-menu-list__item ${menuActive('/dashboard/deposit')}`}>
+                    <li className={`sidebar-menu-list__item ${menuActive('deposit')}`}>
                         <Link to="/dashboard/deposit" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-wallet"></i></span>
                             <span className="text">Deposit</span>
@@ -48,36 +48,36 @@ const Navigation = () => {
                         </Link>
                     </li>
 
-                    <li className="sidebar-menu-list__item {{ menuActive('user.fdr.*') }}">
-                        <Link to="" className="sidebar-menu-list__link">
+                    <li className={`sidebar-menu-list__item ${menuActive('fdr')}`}>
+                        <Link to="/dashboard/fdr/list" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-file-invoice-dollar"></i></span>
                             <span className="text">FDR</span>
                         </Link>
                     </li>
 
-                    <li className="sidebar-menu-list__item {{ menuActive('user.dps.*') }}">
-                        <Link to="" className="sidebar-menu-list__link">
+                    <li className={`sidebar-menu-list__item ${menuActive('dps')}`}>
+                        <Link to="/dashboard/dps/list" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-piggy-bank"></i></span>
                             <span className="text">DPS</span>
                         </Link>
                     </li>
 
-                    <li className="sidebar-menu-list__item {{ menuActive('user.loan.*') }}">
-                        <Link to="" className="sidebar-menu-list__link">
+                    <li className={`sidebar-menu-list__item ${menuActive('loan')}`}>
+                        <Link to="/dashboard/loan/list" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-hand-holding-usd"></i></span>
                             <span className="text">Loan</span>
                         </Link>
                     </li>
 
-                    <li className="sidebar-menu-list__item {{ menuActive('user.airtime.*') }}">
-                        <Link to="" className="sidebar-menu-list__link">
+                    <li className={`sidebar-menu-list__item ${menuActive('mobile-top-up')}`}>
+                        <Link to="/dashboard/mobile-top-up" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-mobile-alt"></i></span>
                             <span className="text">Airtime</span>
                         </Link>
                     </li>
 
-                    <li className="sidebar-menu-list__item {{ menuActive(['user.transfer*', 'user.beneficiary.*']) }}">
-                        <Link to="" className="sidebar-menu-list__link">
+                    <li className={`sidebar-menu-list__item ${menuActive('transfer')}`}>
+                        <Link to="/dashboard/transfer/all" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-exchange-alt"></i></span>
                             <span className="text">Transfer</span>
                         </Link>

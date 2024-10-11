@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'; // Import prop-types
 const PublicRoute = ({ children }) => {
     const { isLoggedIn } = useSelector((state) => state.global);
 
-    return !isLoggedIn ? children : <Navigate to="/dashboard" />;
+    return !isLoggedIn ? children : <Navigate to="/dashboard/welcome" />;
 };
 
 PublicRoute.propTypes = {

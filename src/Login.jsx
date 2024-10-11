@@ -17,7 +17,7 @@ const Login = () => {
     onSubmit: values => {
       console.log(values)
       dispatch(setIsLoggedIn(true));
-      navigate('/dashboard');
+      navigate('/dashboard/welcome');
     }
   })
 

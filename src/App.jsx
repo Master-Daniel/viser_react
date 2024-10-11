@@ -5,6 +5,16 @@ import PrivateRoute from './routes/PrivateRoute';
 import Welcome from './dashboard/Welcome';
 import Deposit from './dashboard/Deposit';
 import Withdraw from './dashboard/Withdraw';
+import FDRList from './dashboard/fdr/list';
+import FDRPlansPage from './dashboard/fdr/Plans';
+import LoanList from './dashboard/loans/list';
+import LoanPlansPage from './dashboard/loans/Plans';
+import DPSList from './dashboard/dps/List';
+import Airtime from './dashboard/Airtime';
+import TransfersList from './dashboard/transfer/list';
+import WithinTransfer from './dashboard/transfer/Within';
+import Others from './dashboard/transfer/Others';
+import WireTransfer from './dashboard/transfer/Wire';
 
 const App = () => {
   return (
@@ -14,7 +24,7 @@ const App = () => {
           <Login />
         </PublicRoute>
       } />
-      <Route path="/dashboard" element={
+      <Route path="/dashboard/welcome" element={
         <PrivateRoute>
           <Welcome />
         </PrivateRoute>
@@ -27,6 +37,56 @@ const App = () => {
       <Route path="/dashboard/withdraw" element={
         <PrivateRoute>
           <Withdraw />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/fdr/list" element={
+        <PrivateRoute>
+          <FDRList />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/fdr/plans" element={
+        <PrivateRoute>
+          <FDRPlansPage />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/loan/list" element={
+        <PrivateRoute>
+          <LoanList />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/loan/plans" element={
+        <PrivateRoute>
+          <LoanPlansPage />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/dps/list" element={
+        <PrivateRoute>
+          <DPSList />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/mobile-top-up" element={
+        <PrivateRoute>
+          <Airtime />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/transfer/all" element={
+        <PrivateRoute>
+          <TransfersList />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/transfer/with-in" element={
+        <PrivateRoute>
+          <WithinTransfer />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/transfer/others" element={
+        <PrivateRoute>
+          <Others />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/transfer/wire" element={
+        <PrivateRoute>
+          <WireTransfer />
         </PrivateRoute>
       } />
     </Routes>

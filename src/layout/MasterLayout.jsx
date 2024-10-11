@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import Navigation from '../components/Navigation';
 import DashboardHeader from '../components/DashboardHeader';
 import '../assets/css/main.css'
+import { useSelector } from 'react-redux';
 
 const MasterLayout = ({ children }) => {
+
+    const { isModalVisible } = useSelector((state) => state.global)
 
     useEffect(() => {
         const preloader = document.querySelector('.preloader');
@@ -33,6 +36,7 @@ const MasterLayout = ({ children }) => {
                     </div>
                 </div>
             </div>
+            {isModalVisible && <div className="modal-backdrop fade show"></div>}
         </React.Fragment>
     )
 }
