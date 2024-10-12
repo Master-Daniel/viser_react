@@ -1,4 +1,18 @@
+import { useLocation } from "react-router-dom";
+import Tab from "../dashboard/settings/Tab"
+import DSPTab from "../dashboard/dps/Tab";
+import SupportTab from "../dashboard/support/Tab";
+import { useSelector } from "react-redux";
+
 const DashboardHeader = () => {
+
+    const location = useLocation();
+    const { pageTitle } = useSelector((state) => state.global)
+
+    const isSettingsPage = location.pathname.includes('settings');
+    const isDSPPage = location.pathname.includes('dsp');
+    const isSupportPage = location.pathname.includes('support');
+
     return (
         <div className="dashboard-header">
             <div className="row gy-3 gy-lg-4">
@@ -8,8 +22,8 @@ const DashboardHeader = () => {
 
                 <div className="col-lg-9 col-7 order-lg-2 order-3">
                     <div className="dashboard-header__details order-lg-fast order-0">
-                        <p className="account-no">Account No 1234567890</p>
-                        <h4 className="dashboard-header__title mb-0">Page Title</h4>
+                        {/* <p className="account-no">Account No 1234567890</p> */}
+                        <h4 className="dashboard-header__title mb-0">{pageTitle}</h4>
                     </div>
                 </div>
 
@@ -18,8 +32,10 @@ const DashboardHeader = () => {
                         <option value="{{ $item->code }}">Select Language</option>
                     </select>
                 </div>
-
-                {/* @stack('bottom-menu') */}
+                
+                {isSettingsPage && <Tab />}
+                {isDSPPage && <DSPTab />}
+                {isSupportPage && <SupportTab />}
             </div>
         </div>
 

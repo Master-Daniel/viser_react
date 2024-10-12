@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom"
 import MasterLayout from "../../layout/MasterLayout"
-import Tab from "./Tab"
 import { useDispatch, useSelector } from "react-redux"
-import { setModalVisible } from "../../lib/redux/slices/global"
-import { useState } from "react"
+import { setModalVisible, setPageTitle } from "../../lib/redux/slices/global"
+import { useEffect, useState } from "react"
+import Tab from "./Tab"
 
 const Others = () => {
 
@@ -16,7 +17,7 @@ const Others = () => {
         dispatch(setModalVisible(true));
         setIsTransferModalVisible(true)
     };
-    
+
     const handleDetailsClick = () => {
         dispatch(setModalVisible(true));
         setIsDetailsModalVisible(true);
@@ -27,7 +28,11 @@ const Others = () => {
         setIsDetailsModalVisible(false)
         setIsTransferModalVisible(false)
     };
-    
+
+    useEffect(() => {
+        dispatch(setPageTitle('Transfer Money to Other Bank'))
+    }, [])
+
     return (
         <MasterLayout>
             <Tab />

@@ -27,7 +27,7 @@ const Navigation = () => {
                 <ul className="sidebar-menu-list">
                     <li className="menu-title pt-0">MENU</li>
 
-                    <li className={`sidebar-menu-list__item ${menuActive('/welcome')}`}>
+                    <li className={`sidebar-menu-list__item ${menuActive('welcome')}`}>
                         <Link to="/dashboard/welcome" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-landmark"></i></span>
                             <span className="text">Dashboard</span>
@@ -41,8 +41,8 @@ const Navigation = () => {
                         </Link>
                     </li>
 
-                    <li className={`sidebar-menu-list__item ${menuActive('/dashboard/withdraw')}`}>
-                        <Link to="/dashboard/withdraw" className="sidebar-menu-list__link">
+                    <li className={`sidebar-menu-list__item ${menuActive('withdraw')}`}>
+                        <Link to="/dashboard/withdraw/history" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-money-bill"></i></span>
                             <span className="text">Withdraw</span>
                         </Link>
@@ -83,8 +83,8 @@ const Navigation = () => {
                         </Link>
                     </li>
 
-                    <li className="sidebar-menu-list__item {{ menuActive('user.transaction.history') }}">
-                        <Link to="" className="sidebar-menu-list__link">
+                    <li className={`sidebar-menu-list__item ${menuActive('transactions')}`}>
+                        <Link to="/dashboard/transactions" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-sync"></i></span>
                             <span className="text">Transactions</span>
                         </Link>
@@ -97,15 +97,15 @@ const Navigation = () => {
                         </Link>
                     </li>
 
-                    <li className="sidebar-menu-list__item {{ menuActive('ticket.*') }}">
-                        <Link to="" className="sidebar-menu-list__link">
+                    <li className={`sidebar-menu-list__item ${menuActive('support')}`}>
+                        <Link to="/dashboard/support/list" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-ticket-alt"></i></span>
                             <span className="text">Support Ticket</span>
                         </Link>
                     </li>
 
-                    <li className="sidebar-menu-list__item {{ menuActive(['user.profile.setting', 'user.change.password', 'user.twofactor']) }}">
-                        <Link to="" className="sidebar-menu-list__link">
+                    <li className={`sidebar-menu-list__item ${menuActive('settings')}`}>
+                        <Link to="/dashboard/settings/profile-setting" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-cog"></i></span>
                             <span className="text">Setting</span>
                         </Link>

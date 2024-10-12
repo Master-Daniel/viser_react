@@ -1,6 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useDispatch } from 'react-redux'
 import MasterLayout from '../layout/MasterLayout'
+import { setPageTitle } from '../lib/redux/slices/global'
+import { useEffect } from 'react'
 
 const Airtime = () => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setPageTitle('Mobile Top Up'))
+    }, [])
     return (
         <MasterLayout>
             <div className="row justify-content-center">

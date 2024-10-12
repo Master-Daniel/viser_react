@@ -1,11 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useDispatch } from 'react-redux'
 import MasterLayout from '../../layout/MasterLayout'
-import Tab from './Tab'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { setPageTitle } from '../../lib/redux/slices/global'
+import Tab from './Tab'
 
 const Installments = () => {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setPageTitle('FDR Installments'))
+    }, [])
+
     return (
         <MasterLayout>
-            <Tab />
+        <Tab />
             <div className="row justify-content-center">
                 <div className="col-xl-7 col-lg-12">
                     <div className="custom--card">

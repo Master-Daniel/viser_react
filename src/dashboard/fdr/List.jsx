@@ -1,8 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from 'react-router-dom'
 import MasterLayout from '../../layout/MasterLayout'
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { setPageTitle } from '../../lib/redux/slices/global'
 import Tab from './Tab'
 
 const FDRList = () => {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setPageTitle('My FDR List'))
+    }, [])
+
     return (
         <MasterLayout>
             <Tab />

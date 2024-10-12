@@ -1,11 +1,9 @@
 import { Link } from 'react-router-dom'
 import MasterLayout from '../../layout/MasterLayout'
-import Tab from './Tab'
 
 const DPSList = () => {
     return (
         <MasterLayout>
-            <Tab />
             <div className="card custom--card overflow-hidden">
                 <div className="card-header">
                     <div className="header-nav mb-0">

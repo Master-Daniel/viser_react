@@ -1,7 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useDispatch } from "react-redux"
 import MasterLayout from "../../layout/MasterLayout"
 import Tab from "./Tab"
+import { setPageTitle } from "../../lib/redux/slices/global"
+import { useEffect } from "react"
 
 const WireTransfer = () => {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setPageTitle('Wire Transfer'))
+    }, [])
+
     return (
         <MasterLayout>
             <Tab />
@@ -52,7 +63,7 @@ const WireTransfer = () => {
                     <div className="card custom--card">
                         <div className="card-body">
                             <div className="text-center">
-                                <div style="text-align: left;"><br /></div> 
+                                <div style="text-align: left;"><br /></div>
                             </div>
                             <form method="POST">
                                 <div className="form-group">

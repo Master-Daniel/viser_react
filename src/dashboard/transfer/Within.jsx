@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from 'react-router-dom'
 import MasterLayout from '../../layout/MasterLayout'
-import Tab from './Tab'
 import { useDispatch, useSelector } from 'react-redux';
-import { setModalVisible } from '../../lib/redux/slices/global';
+import { setModalVisible, setPageTitle } from '../../lib/redux/slices/global';
+import Tab from './Tab';
+import { useEffect } from 'react';
 
 const WithinTransfer = () => {
 
@@ -16,7 +18,11 @@ const WithinTransfer = () => {
     const handleClose = () => {
         dispatch(setModalVisible(false));
     };
-    
+
+    useEffect(() => {
+        dispatch(setPageTitle('Transfer Money Within'))
+    }, [])
+
     return (
         <MasterLayout>
             <Tab />

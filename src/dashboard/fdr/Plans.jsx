@@ -1,8 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useDispatch } from "react-redux";
 import FDRPlans from "../../components/FDRPlans";
 import MasterLayout from "../../layout/MasterLayout";
+import { useEffect } from "react";
+import { setPageTitle } from "../../lib/redux/slices/global";
 import Tab from "./Tab";
 
 const FDRPlansPage = () => {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setPageTitle('Fixed Deposit Receipt Plans'))
+    }, [])
+
     return (
         <MasterLayout>
             <Tab />

@@ -4,7 +4,6 @@ import PublicRoute from './routes/PublicRoutes';
 import PrivateRoute from './routes/PrivateRoute';
 import Welcome from './dashboard/Welcome';
 import Deposit from './dashboard/Deposit';
-import Withdraw from './dashboard/Withdraw';
 import FDRList from './dashboard/fdr/list';
 import FDRPlansPage from './dashboard/fdr/Plans';
 import LoanList from './dashboard/loans/list';
@@ -15,6 +14,14 @@ import TransfersList from './dashboard/transfer/list';
 import WithinTransfer from './dashboard/transfer/Within';
 import Others from './dashboard/transfer/Others';
 import WireTransfer from './dashboard/transfer/Wire';
+import Transactions from './dashboard/Transactions';
+import SupportTicket from './dashboard/support/Tickets';
+import NewTicket from './dashboard/support/NewTicket';
+import Profile from './dashboard/settings/profile';
+import TwoFactor from './dashboard/settings/2factor';
+import Password from './dashboard/settings/Password';
+import WithdrawHistory from './dashboard/withdraw/history';
+import Withdraw from './dashboard/withdraw/withdraw';
 
 const App = () => {
   return (
@@ -32,6 +39,11 @@ const App = () => {
       <Route path="/dashboard/deposit" element={
         <PrivateRoute>
           <Deposit />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/withdraw/history" element={
+        <PrivateRoute>
+          <WithdrawHistory />
         </PrivateRoute>
       } />
       <Route path="/dashboard/withdraw" element={
@@ -87,6 +99,36 @@ const App = () => {
       <Route path="/dashboard/transfer/wire" element={
         <PrivateRoute>
           <WireTransfer />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/transactions" element={
+        <PrivateRoute>
+          <Transactions />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/support/list" element={
+        <PrivateRoute>
+          <SupportTicket />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/support/ticket/new" element={
+        <PrivateRoute>
+          <NewTicket />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/settings/profile-setting" element={
+        <PrivateRoute>
+          <Profile />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/settings/change-password" element={
+        <PrivateRoute>
+          <Password />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/settings/twofactor" element={
+        <PrivateRoute>
+          <TwoFactor />
         </PrivateRoute>
       } />
     </Routes>

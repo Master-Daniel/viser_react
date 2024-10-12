@@ -1,8 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from "react-router-dom"
 import MasterLayout from "../../layout/MasterLayout"
 import Tab from "./Tab"
+import { useDispatch } from "react-redux"
+import { useEffect } from "react"
+import { setPageTitle } from "../../lib/redux/slices/global"
 
 const TransfersList = () => {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setPageTitle('Transfer History'))
+    }, [])
+
     return (
         <MasterLayout>
             <Tab />

@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     isLoggedIn: false,
-    isModalVisible: false
+    isModalVisible: false,
+    pageTitle: ""
 }
 
 export const globalSlice = createSlice({
@@ -15,12 +16,16 @@ export const globalSlice = createSlice({
         setModalVisible: (state, action) => {
             state.isModalVisible = action.payload
         },
+        setPageTitle: (state, action) => {
+            state.pageTitle = action.payload
+        }
     }
 })
 
 export const {
     setIsLoggedIn,
-    setModalVisible
+    setModalVisible,
+    setPageTitle
 }  = globalSlice.actions;
 
 export default globalSlice.reducer;

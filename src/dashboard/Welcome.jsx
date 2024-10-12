@@ -1,8 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useDispatch } from 'react-redux';
 import DashboardCard from '../components/DashboardCard'
 import MasterLayout from '../layout/MasterLayout'
 import { notifySuccess } from '../util/custom-functions';
+import { useEffect } from 'react';
+import { setPageTitle } from '../lib/redux/slices/global';
 
 const Welcome = () => {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setPageTitle('Dashboard'))
+    }, [])
 
     const copyToClipboard = () => {
         const urlText = document.getElementById('ref').innerText;

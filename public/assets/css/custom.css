@@ -208,12 +208,11 @@
   }
 }
 
-.btn.disabled,
-.btn:disabled,
-fieldset:disabled .btn {
-  opacity: 0.3;
+.btn.disabled, .btn:disabled, fieldset:disabled .btn {
+  opacity: 0.5;
+  background-color: hsl(var(--black) / 0.5);
+  border-color: hsl(var(--black) / 0.01);
 }
-
 
 .h-45 {
   height: 50px;
@@ -228,10 +227,6 @@ fieldset:disabled .btn {
   background-color: #fff;
   border-color: hsl(var(--black) / 0.08);
   transition: all linear .15s;
-}
-
-.form--control:focus~.input-group-text {
-  border-color: hsl(var(--base));
 }
 
 .account-form .input-group-text {
@@ -252,4 +247,19 @@ fieldset:disabled .btn {
   .hover-input-popup .input-popup {
     left: 70% !important;
   }
+}
+
+.input-group-text.removeFile{
+  border-color: hsl(var(--black) / 0.1) !important;
+  border-style: dashed;
+}
+
+
+.daterangepicker td.active,
+.daterangepicker td.active:hover,
+.daterangepicker .ranges li.active, 
+.daterangepicker td.active,
+.daterangepicker td.active:hover,
+.daterangepicker .ranges li.active{
+     background-color: hsl(var(--base)) !important;
 }

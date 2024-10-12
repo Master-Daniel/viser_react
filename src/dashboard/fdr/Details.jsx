@@ -1,7 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useDispatch } from "react-redux"
 import MasterLayout from "../../layout/MasterLayout"
+import { useEffect } from "react"
+import { setPageTitle } from "../../lib/redux/slices/global"
 import Tab from "./Tab"
 
 const Details = () => {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setPageTitle('FDR Details'))
+    }, [])
+
     return (
         <MasterLayout>
             <Tab />
@@ -57,138 +68,12 @@ const Details = () => {
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>1</td>
-                                            <td className="">
-                                                16 May, 2023
-                                            </td>
-                                            <td>
-                                                16 May, 2023
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td className="">
-                                                15 Jun, 2023
-                                            </td>
-                                            <td>
-                                                15 Jun, 2023
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td className="">
-                                                15 Jul, 2023
-                                            </td>
-                                            <td>
-                                                15 Jul, 2023
-                                            </td>
-                                        </tr>
-                                        <tr>
                                             <td>4</td>
                                             <td className="">
                                                 14 Aug, 2023
                                             </td>
                                             <td>
                                                 14 Aug, 2023
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td className="">
-                                                13 Sep, 2023
-                                            </td>
-                                            <td>
-                                                13 Sep, 2023
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td className="">
-                                                13 Oct, 2023
-                                            </td>
-                                            <td>
-                                                13 Oct, 2023
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td className="">
-                                                12 Nov, 2023
-                                            </td>
-                                            <td>
-                                                15 Nov, 2023
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>8</td>
-                                            <td className="">
-                                                12 Dec, 2023
-                                            </td>
-                                            <td>
-                                                12 Dec, 2023
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>9</td>
-                                            <td className="">
-                                                11 Jan, 2024
-                                            </td>
-                                            <td>
-                                                24 Mar, 2024
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>10</td>
-                                            <td className="">
-                                                10 Feb, 2024
-                                            </td>
-                                            <td>
-                                                24 Mar, 2024
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>11</td>
-                                            <td className="">
-                                                11 Mar, 2024
-                                            </td>
-                                            <td>
-                                                24 Mar, 2024
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>12</td>
-                                            <td className="">
-                                                10 Apr, 2024
-                                            </td>
-                                            <td>
-                                                10 Apr, 2024
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>13</td>
-                                            <td className="">
-                                                10 May, 2024
-                                            </td>
-                                            <td>
-                                                10 May, 2024
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>14</td>
-                                            <td className="">
-                                                09 Jun, 2024
-                                            </td>
-                                            <td>
-                                                09 Jun, 2024
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>15</td>
-                                            <td className="">
-                                                09 Jul, 2024
-                                            </td>
-                                            <td>
-                                                09 Jul, 2024
                                             </td>
                                         </tr>
                                     </tbody>
