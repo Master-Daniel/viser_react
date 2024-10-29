@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isLoggedIn: false,
     isModalVisible: false,
-    pageTitle: ""
+    pageTitle: "",
+    profile: null
 }
 
 export const globalSlice = createSlice({
@@ -18,6 +19,9 @@ export const globalSlice = createSlice({
         },
         setPageTitle: (state, action) => {
             state.pageTitle = action.payload
+        },
+        setProfile: (state, action) => {
+            state.profile = action.payload
         }
     }
 })
@@ -25,7 +29,8 @@ export const globalSlice = createSlice({
 export const {
     setIsLoggedIn,
     setModalVisible,
-    setPageTitle
+    setPageTitle,
+    setProfile
 }  = globalSlice.actions;
 
 export default globalSlice.reducer;

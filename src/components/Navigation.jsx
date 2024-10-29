@@ -1,16 +1,27 @@
 import { useDispatch } from "react-redux"
 import { setIsLoggedIn } from "../lib/redux/slices/global"
 import { Link, useLocation } from "react-router-dom"
-import { notifySuccess } from "../util/custom-functions"
+import { notifyError, notifySuccess } from "../util/custom-functions"
+import { useMutation } from "react-query"
+import { AuthApi } from "../lib/hooks/Auth"
 
 const Navigation = () => {
 
     const dispatch = useDispatch()
-    const location = useLocation();
+    const location = useLocation()
+    
+    const { mutate } = useMutation("logout", AuthApi.logout);;
 
     const logOut = () => {
-        dispatch(setIsLoggedIn(false))
-        notifySuccess("Logged out successfully");
+        mutate({}, {
+            onSuccess: ({ data }) => {
+                notifySuccess(data.message.success)
+                dispatch(setIsLoggedIn(false))
+            },
+            onError: (error) => {
+                notifyError(error.message.error)
+            }
+        })
     }
 
     const menuActive = (path) => {

@@ -22,6 +22,7 @@ import TwoFactor from './dashboard/settings/2factor';
 import Password from './dashboard/settings/Password';
 import WithdrawHistory from './dashboard/withdraw/history';
 import Withdraw from './dashboard/withdraw/withdraw';
+import Register from './Register';
 
 const App = () => {
   return (
@@ -29,6 +30,11 @@ const App = () => {
       <Route path="/" element={
         <PublicRoute>
           <Login />
+        </PublicRoute>
+      } />
+      <Route path="/register" element={
+        <PublicRoute>
+          <Register />
         </PublicRoute>
       } />
       <Route path="/dashboard/welcome" element={

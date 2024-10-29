@@ -10,6 +10,7 @@ const TwoFactor = () => {
     useEffect(() => {
         dispatch(setPageTitle('2FA Security'))
     }, [])
+    
     return (
         <MasterLayout>
             <div className="row justify-content-center gy-4">

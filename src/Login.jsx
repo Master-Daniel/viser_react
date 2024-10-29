@@ -1,23 +1,42 @@
 import { useFormik } from "formik"
 import { useDispatch } from "react-redux"
-import { setIsLoggedIn } from "./lib/redux/slices/global"
-import { useNavigate } from 'react-router-dom';
+import { setIsLoggedIn, setProfile } from "./lib/redux/slices/global"
+import { Link, useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
 import AppLayout from "./layout/AppLayout";
+import { useMutation } from "react-query";
+import { AuthApi } from "./lib/hooks/Auth";
+import { CircularProgress } from "@mui/material";
+import { notifyError } from "./util/custom-functions";
 
 const Login = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
-  const loginFormik = useFormik({
+  const { mutate, error, isLoading } = useMutation("login", AuthApi.login);
+
+  const loginForm = useFormik({
     initialValues: {
-      email: '',
+      username: '',
       password: '',
     },
+    validationSchema: Yup.object().shape({
+      username: Yup.string().required('Username or email is required'),
+      password: Yup.string().required('Password is required')
+    }),
     onSubmit: values => {
-      console.log(values)
-      dispatch(setIsLoggedIn(true));
-      navigate('/dashboard/welcome');
+      mutate(values, {
+        onSuccess: ({ data }) => {
+          localStorage.setItem('token', data.data.access_token)
+          dispatch(setProfile(data.data.user));
+          dispatch(setIsLoggedIn(true));
+          navigate('/dashboard/welcome');
+        },
+        onError: () => {
+          notifyError(error.message.error)
+        }
+      })
     }
   })
 
@@ -39,22 +58,34 @@ const Login = () => {
                 <h6 className="section-heading__subtitle">Sign In</h6>
                 <h3 className="section-heading__title">Welcome Back!</h3>
               </div>
-              <form method="POST" className="verify-gcaptcha" onSubmit={loginFormik.handleSubmit}>
+              <form method="POST" className="verify-gcaptcha" onSubmit={loginForm.handleSubmit}>
                 <div className="row">
                   <div className="col-12">
                     <div className="form-group">
                       <label htmlFor="username" className="form--label">Username or Email</label>
-                      <input type="text" name="username" className="form--control" id="username" />
+                      <input 
+                        onChange={loginForm.handleChange}
+                        onBlur={loginForm.handleBlur}
+                        value={loginForm.values.username}
+                        type="text" 
+                        name="username" 
+                        className={`form--control ${loginForm.errors.username && loginForm.touched.username ? 'border border-danger' : ''}`}
+                        id="username" />
                     </div>
                   </div>
                   <div className="col-12">
                     <div className="form-group">
                       <label htmlFor="your-password" className="form--label">Password</label>
-                      <input id="your-password" type="password" className="form--control" name="password" />
+                      <input 
+                        onChange={loginForm.handleChange}
+                        onBlur={loginForm.handleBlur}
+                        value={loginForm.values.password}
+                        id="your-password" 
+                        type="password" 
+                        className={`form--control ${loginForm.errors.password && loginForm.touched.password ? 'border border-danger' : ''}`}
+                        name="password" />
                     </div>
                   </div>
-
-                  {/* <x-captcha /> */}
 
                   <div className="col-12">
                     <div className="d-flex form-group flex-wrap justify-content-between">
@@ -62,20 +93,21 @@ const Login = () => {
                         <input className="form-check-input" type="checkbox" name="remember" id="remember" />
                         <label className="form-check-label" htmlFor="remember">Remember me</label>
                       </div>
-                      <a href="{{ route('user.password.request') }}" className="forgot-password text--base">Forgot Password?</a>
+                      <Link to="" className="forgot-password text--base">Forgot Password?</Link>
                     </div>
                   </div>
 
                   <div className="col-12">
                     <div className="form-group">
-                      <button type="submit" id="recaptcha" className="btn btn--base w-100">Sign In</button>
+                      <button type="submit" id="recaptcha" className="btn btn--base w-100" disabled={isLoading}> {
+                        isLoading ? <CircularProgress size={20} color="inherit" /> : 'Sign In'}</button>
                     </div>
                   </div>
 
                   <div className="col-12">
                     <div className="have-account text-center">
-                      <p className="have-account__text">Don&rsquo;t Have An Account?
-                        <a href="" className="have-account__link text--base">Create an Account</a>
+                      <p className="have-account__text">Don&rsquo;t Have An Account? 
+                        <Link to="/register" className="have-account__link text--base">&nbsp;Create an Account</Link>
                       </p>
                     </div>
                   </div>
