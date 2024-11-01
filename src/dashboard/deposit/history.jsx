@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from 'react-router-dom'
-import MasterLayout from '../layout/MasterLayout'
+import MasterLayout from '../../layout/MasterLayout'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
-import { setPageTitle } from '../lib/redux/slices/global'
+import { setPageTitle } from '../../lib/redux/slices/global'
 
-const Deposit = () => {
+const DepositHistory = () => {
 
     const dispatch = useDispatch()
 
@@ -22,7 +22,7 @@ const Deposit = () => {
                         <button className="btn btn--base" type="submit"><i className="la la-search"></i></button>
                     </div>
                 </form>
-                <Link className="btn btn--base" href=""><i className="las la-plus"></i> Deposit Now</Link>
+                <Link className="btn btn--base" href="/dashboard/deposit"><i className="las la-plus"></i> Deposit Now</Link>
             </div>
             <div className="card-body p-0">
                 <div className="table-responsive">
@@ -101,4 +101,4 @@ const Deposit = () => {
     )
 }
 
-export default Deposit
+export default DepositHistory

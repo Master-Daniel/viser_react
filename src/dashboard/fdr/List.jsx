@@ -2,15 +2,29 @@
 import { Link } from 'react-router-dom'
 import MasterLayout from '../../layout/MasterLayout'
 import { useDispatch } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { setPageTitle } from '../../lib/redux/slices/global'
 import Tab from './Tab'
+import { useQuery } from 'react-query'
+import { UserApi } from '../../lib/hooks/User'
 
 const FDRList = () => {
 
     const dispatch = useDispatch()
+    const [list, setList] = useState([])
+
+    const { refetch } = useQuery('loan-list', UserApi.fdrList, {
+        onSuccess: ({ data }) => {
+            console.log(data.data.fdr)
+            if (data.status == 'success') {
+                setList(data.data.fdr)
+            }
+        },
+        refetchOnWindowFocus: true,
+    });
 
     useEffect(() => {
+        refetch()
         dispatch(setPageTitle('My FDR List'))
     }, [])
 
@@ -49,39 +63,37 @@ const FDRList = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        #JHQJA3PQP3CF
-                                    </td>
-                                    <td>5%</td>
-                                    <td>
-                                        <span className="fw-semibold">$40.00</span>
-                                    </td>
-                                    <td>$2.00 /30 Days</td>
-                                    <td>N/A</td>
-                                    <td>
-                                        15 Apr, 2024
-                                    </td>
-                                    <td><span className="badge badge--dark">Closed</span></td>
-                                    <td>
-                                        17 Apr, 2023 11:59 PM
-                                    </td>
-                                    <td>
-                                        <div className="dropdown">
-                                            <button aria-expanded="false" className="btn btn--sm btn--base" data-bs-toggle="dropdown" type="button">
-                                                <i className="las la-ellipsis-v m-0"></i>
-                                            </button>
-                                            <div className="dropdown-menu">
-                                                <Link to="dashboard/fdr/details/JHQJA3PQP3CF" className="dropdown-item">
-                                                    <i className="las la-list"></i> Details
-                                                </Link>
-                                                <Link to="dashboard/fdr/installments/JHQJA3PQP3CF" className="dropdown-item">
-                                                    <i className="las la-wallet"></i> Installments
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {
+                                    list.data > 0 && list.data.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{item.fdr_number}</td>
+                                            <td>5%</td>
+                                            <td>
+                                                <span className="fw-semibold">{item.amount}</span>
+                                            </td>
+                                            <td>$2.00 /30 Days</td>
+                                            <td>N/A</td>
+                                            <td>{item.locked_date}</td>
+                                            <td><span className="badge badge--dark">{item.status}</span></td>
+                                            <td>{item.created_at}</td>
+                                            <td>
+                                                <div className="dropdown">
+                                                    <button aria-expanded="false" className="btn btn--sm btn--base" data-bs-toggle="dropdown" type="button">
+                                                        <i className="las la-ellipsis-v m-0"></i>
+                                                    </button>
+                                                    <div className="dropdown-menu">
+                                                        <Link to={`dashboard/fdr/details/${item.fdr_number}`} className="dropdown-item">
+                                                            <i className="las la-list"></i> Details
+                                                        </Link>
+                                                        <Link to={`dashboard/fdr/installments/${item.fdr_number}`} className="dropdown-item">
+                                                            <i className="las la-wallet"></i> Installments
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>

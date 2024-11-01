@@ -2,15 +2,28 @@
 import { useDispatch } from "react-redux";
 import FDRPlans from "../../components/FDRPlans";
 import MasterLayout from "../../layout/MasterLayout";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setPageTitle } from "../../lib/redux/slices/global";
 import Tab from "./Tab";
+import { UserApi } from "../../lib/hooks/User";
+import { useQuery } from "react-query";
 
 const FDRPlansPage = () => {
 
     const dispatch = useDispatch()
+    const [plans, setPlans] = useState([])
+
+    const { refetch } = useQuery('fdr-plans', UserApi.fdrPlans, {
+        onSuccess: ({ data }) => {
+            if (data.status == 'success') {
+                setPlans(data.data.fdr_plans)
+            }
+        },
+        refetchOnWindowFocus: true,
+    });
 
     useEffect(() => {
+        refetch()
         dispatch(setPageTitle('Fixed Deposit Receipt Plans'))
     }, [])
 
@@ -18,16 +31,16 @@ const FDRPlansPage = () => {
         <MasterLayout>
             <Tab />
             <div className="row g-4 justify-content-center">
-                {Array.from({ length: 6 }).map((_, index) => (
+                {plans.map((plan, index) => (
                     <FDRPlans
                         key={index}
-                        id={index}
-                        title="Advance"
-                        percentage="12"
-                        returnDays="30"
+                        id={plan.id}
+                        title={plan.name}
+                        percentage={plan.interest_rate}
+                        returnDays={plan.locked_days}
                         duration="365"
-                        minimum="$100.00"
-                        maximum="$5,000.00"
+                        minimum={plan.minimum_amount}
+                        maximum={plan.maximum_amount}
                     />
                 ))}
             </div>

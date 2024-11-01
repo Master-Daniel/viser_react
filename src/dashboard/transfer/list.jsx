@@ -3,14 +3,29 @@ import { Link } from "react-router-dom"
 import MasterLayout from "../../layout/MasterLayout"
 import Tab from "./Tab"
 import { useDispatch } from "react-redux"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { setPageTitle } from "../../lib/redux/slices/global"
+import { UserApi } from "../../lib/hooks/User"
+import { useQuery } from "react-query"
+import { formatDate } from "../../util/custom-functions"
 
 const TransfersList = () => {
 
     const dispatch = useDispatch()
+    const [list, setList] = useState([])
+
+    const { refetch } = useQuery('transfer-history', UserApi.transferHistory, {
+        onSuccess: ({ data }) => {
+            console.log(data)
+            if (data.status == 'success') {
+                setList(data.data.transfers)
+            }
+        },
+        refetchOnWindowFocus: true,
+    });
 
     useEffect(() => {
+        refetch()
         dispatch(setPageTitle('Transfer History'))
     }, [])
 
@@ -49,31 +64,35 @@ const TransfersList = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <span className="text--dark fw-bold">#FWZ524ZTRJCG</span>
-                                    </td>
-                                    <td>
-                                        <em>17 Apr, 2023 02:27 AM</em>
-                                    </td>
-                                    <td>
-                                        <span className="text--base fw-bold">Calista Mills</span>
-                                    </td>
-                                    <td>
-                                        4654654651544
-                                    </td>
-                                    <td>
-                                        <span className="text--warning fw-bold">Wire Transfer</span>
-                                        <br />
-                                        <button className="badge badge--info wire-transfer" data-id="213" type="button"> <i className="la la-eye"></i> Recipient Info</button>
-                                    </td>
-                                    <td>$50.00</td>
-                                    <td>$1.00</td>
-                                    <td>$51.00</td>
-                                    <td>
-                                        <span className="badge badge--warning">Pending</span>
-                                    </td>
-                                </tr>
+                                {
+                                    list.data.length > 0 && list.data.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>
+                                                <span className="text--dark fw-bold">#{item.trx}</span>
+                                            </td>
+                                            <td>
+                                                <em>{formatDate(item.created_at)}</em>
+                                            </td>
+                                            <td>
+                                                <span className="text--base fw-bold">Calista Mills</span>
+                                            </td>
+                                            <td>
+                                                4654654651544
+                                            </td>
+                                            <td>
+                                                <span className="text--warning fw-bold">Wire Transfer</span>
+                                                <br />
+                                                <button className="badge badge--info wire-transfer" data-id="213" type="button"> <i className="la la-eye"></i> Recipient Info</button>
+                                            </td>
+                                            <td>$50.00</td>
+                                            <td>$1.00</td>
+                                            <td>$51.00</td>
+                                            <td>
+                                                <span className="badge badge--warning">Pending</span>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>

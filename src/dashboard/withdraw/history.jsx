@@ -1,15 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useDispatch } from "react-redux"
 import MasterLayout from "../../layout/MasterLayout"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { setPageTitle } from "../../lib/redux/slices/global"
 import { Link } from "react-router-dom"
+import { UserApi } from "../../lib/hooks/User"
+import { useQuery } from "react-query"
 
 const WithdrawHistory = () => {
 
     const dispatch = useDispatch()
+    const [list, setList] = useState([])
+
+    const { refetch } = useQuery('withdraw-history', UserApi.withdrawHistory, {
+        onSuccess: ({ data }) => {
+            console.log(data)
+            if (data.status == 'success') {
+                setList(data.data.withdrawals)
+            }
+        },
+        refetchOnWindowFocus: true,
+    });
 
     useEffect(() => {
+        refetch()
         dispatch(setPageTitle('Withdraw'))
     }, [])
 

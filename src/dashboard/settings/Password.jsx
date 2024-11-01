@@ -17,29 +17,34 @@ const Password = () => {
         dispatch(setPageTitle('Change Password'))
     }, [])
 
-    const { mutate, error, isLoading } = useMutation("change-password", UserApi.changePassword);
+    const { mutate, isLoading } = useMutation("change-password", UserApi.changePassword);
 
     const passwordForm = useFormik({
         initialValues: {
             current_password: '',
             password: '',
-            confirm_password: '',
+            password_confirmation: '',
         },
         validationSchema: Yup.object().shape({
             current_password: Yup.string().required('Current Password is required'),
             password: Yup.string().required('New Password is required').min(8, 'Password must be at least 8 characters'),
-            confirm_password: Yup.string()
+            password_confirmation: Yup.string()
                 .oneOf([Yup.ref('password'), null], 'Passwords must match')
                 .required('Confirm password is required'),
         }),
         onSubmit: values => {
             mutate(values, {
                 onSuccess: ({ data }) => {
-                    notifySuccess(data.message.success)
+                    if (data.status == 'error') {
+                        data.message.error.forEach((error) => {
+                            notifyError(error)
+                        })
+                    } else {
+                        data.message.success.forEach((message) => {
+                            notifySuccess(message)
+                        })
+                    }
                 },
-                onError: () => {
-                    notifyError(error.message.error)
-                }
             })
         }
     })
@@ -53,7 +58,7 @@ const Password = () => {
                             <form className="register" method="post" onSubmit={passwordForm.handleSubmit}>
                                 <div className="form-group">
                                     <label className="form-label">Current Password</label>
-                                    <input 
+                                    <input
                                         onChange={passwordForm.handleChange}
                                         onBlur={passwordForm.handleBlur}
                                         value={passwordForm.values.current_password}
@@ -62,23 +67,23 @@ const Password = () => {
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label">Password</label>
-                                    <input 
+                                    <input
                                         onChange={passwordForm.handleChange}
                                         onBlur={passwordForm.handleBlur}
                                         value={passwordForm.values.password}
                                         className={`form--control form-control ${passwordForm.errors.password && passwordForm.touched.password ? 'border border-danger' : ''}`}
-                                        name="password" 
+                                        name="password"
                                         type="password" />
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label">Confirm Password</label>
-                                    <input 
+                                    <input
                                         onChange={passwordForm.handleChange}
                                         onBlur={passwordForm.handleBlur}
-                                        value={passwordForm.values.confirm_password}
-                                        type="password" 
-                                        className={`form--control form-control ${passwordForm.errors.confirm_password && passwordForm.touched.confirm_password ? 'border border-danger' : ''}`}
-                                        name="confirm_password"/>
+                                        value={passwordForm.values.password_confirmation}
+                                        type="password"
+                                        className={`form--control form-control ${passwordForm.errors.password_confirmation && passwordForm.touched.password_confirmation ? 'border border-danger' : ''}`}
+                                        name="password_confirmation" />
                                 </div>
                                 <button className="btn btn--base w-100" type="submit" disabled={isLoading}>
                                     {

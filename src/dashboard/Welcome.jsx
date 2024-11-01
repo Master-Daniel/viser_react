@@ -15,19 +15,18 @@ const Welcome = () => {
     const [referralLink, setReferralLink] = useState('')
     const { profile } = useSelector((state) => state.global)
 
-    const { refetch, error } = useQuery('user-profile', UserApi.getUserProfile, {
+    const { refetch } = useQuery('user-profile', UserApi.getUserProfile, {
         onSuccess: ({ data }) => {
             dispatch(setProfile(data.data.user));
         },
-        onError: notifyError(error.message.error),
         refetchOnWindowFocus: true,
     });
     
-    const { refetch: refetchReferralLink, error: referralLinkError } = useQuery('referral-link', UserApi.getUserReferralLink, {
+    const { refetch: refetchReferralLink } = useQuery('referral-link', UserApi.getUserReferralLink, {
         onSuccess: ({ data }) => {
+            console.log(data)
             setReferralLink(data.data.referral_link);
         },
-        onError: notifyError(referralLinkError.message.error),
         refetchOnWindowFocus: true,
     });
 
@@ -76,37 +75,37 @@ const Welcome = () => {
                 <DashboardCard
                     title="Pending Deposits"
                     icon="wallet"
-                    amount="21000"
+                    amount="0"
                 />
 
                 <DashboardCard
                     title="Pending Withdrawals"
                     icon="money-check"
-                    amount="21000"
+                    amount="0"
                 />
 
                 <DashboardCard
                     title="Today Transactions"
                     icon="exchange-alt"
-                    amount="21000"
+                    amount="0"
                 />
 
                 <DashboardCard
                     title="Running FDR"
                     icon="money-bill"
-                    amount="21000"
+                    amount="0"
                 />
 
                 <DashboardCard
                     title="Running DPS"
                     icon="box-open"
-                    amount="21000"
+                    amount="0"
                 />
 
                 <DashboardCard
                     title="Running Loan"
                     icon="hand-holding-usd"
-                    amount="21000"
+                    amount="0"
                 />
 
                 <div className="pt-60">

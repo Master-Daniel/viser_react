@@ -46,7 +46,7 @@ const Navigation = () => {
                     </li>
 
                     <li className={`sidebar-menu-list__item ${menuActive('deposit')}`}>
-                        <Link to="/dashboard/deposit" className="sidebar-menu-list__link">
+                        <Link to="/dashboard/deposit/history" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-wallet"></i></span>
                             <span className="text">Deposit</span>
                         </Link>

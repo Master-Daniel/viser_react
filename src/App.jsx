@@ -3,7 +3,6 @@ import Login from './Login';
 import PublicRoute from './routes/PublicRoutes';
 import PrivateRoute from './routes/PrivateRoute';
 import Welcome from './dashboard/Welcome';
-import Deposit from './dashboard/Deposit';
 import FDRList from './dashboard/fdr/list';
 import FDRPlansPage from './dashboard/fdr/Plans';
 import LoanList from './dashboard/loans/list';
@@ -23,6 +22,8 @@ import Password from './dashboard/settings/Password';
 import WithdrawHistory from './dashboard/withdraw/history';
 import Withdraw from './dashboard/withdraw/withdraw';
 import Register from './Register';
+import DepositHistory from './dashboard/deposit/history';
+import Deposit from './dashboard/deposit/deposit';
 
 const App = () => {
   return (
@@ -40,6 +41,11 @@ const App = () => {
       <Route path="/dashboard/welcome" element={
         <PrivateRoute>
           <Welcome />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/deposit/history" element={
+        <PrivateRoute>
+          <DepositHistory />
         </PrivateRoute>
       } />
       <Route path="/dashboard/deposit" element={

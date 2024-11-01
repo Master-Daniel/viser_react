@@ -14,20 +14,28 @@ const Profile = () => {
     const dispatch = useDispatch()
     const { profile } = useSelector((state) => state.global)
 
-    const { refetch, error } = useQuery('user-profile', UserApi.getUserProfile, {
+    const { refetch } = useQuery('user-profile', UserApi.getUserProfile, {
         onSuccess: ({ data }) => {
-            dispatch(setProfile(data.data.user));
+            if (data.status == 'error') {
+                data.message.error.forEach((error) => {
+                    notifyError(error)
+                })
+            } else {
+                dispatch(setProfile(data.data.user));
+            }
         },
-        onError: notifyError(error.message.error),
-        refetchOnWindowFocus: true,
+        refetchOnWindowFocus: false,
     });
 
-    const { mutate, error: profileSettingsError, isLoading } = useMutation("profile-settings", UserApi.profileSetting);
+    const { mutate, isLoading } = useMutation("profile-settings", UserApi.profileSetting);
+
+    const FILE_SIZE = 2 * 1024 * 1024;
+    const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
 
     const profileForm = useFormik({
         initialValues: {
-            first_name: '',
-            last_name: '',
+            firstname: '',
+            lastname: '',
             city: '',
             image: '',
             state: '',
@@ -35,21 +43,34 @@ const Profile = () => {
             zip: '',
         },
         validationSchema: Yup.object().shape({
-            first_name: Yup.string().required('First name is required'),
-            last_name: Yup.string().required('Last name is required'),
+            firstname: Yup.string().required('First name is required'),
+            lastname: Yup.string().required('Last name is required'),
             city: Yup.string().required('City is required'),
             state: Yup.string().required('State is required'),
             address: Yup.string().required('Address is required'),
             zip: Yup.string().required('Zip Code is required'),
+            image: Yup.mixed()
+                .required('An image is required')
+                .test('fileSize', 'File size is too large', (value) => {
+                    return value && value.size <= FILE_SIZE;
+                })
+                .test('fileType', 'Unsupported file format', (value) => {
+                    return value && SUPPORTED_FORMATS.includes(value.type);
+                }),
         }),
         onSubmit: values => {
             mutate(values, {
                 onSuccess: ({ data }) => {
-                    notifySuccess(data.message.success)
+                    if (data.status == 'error') {
+                        data.message.error.forEach((error) => {
+                            notifyError(error)
+                        })
+                    } else {
+                        data.message.success.forEach((message) => {
+                            notifySuccess(message)
+                        })
+                    }
                 },
-                onError: () => {
-                    notifyError(profileSettingsError.message.error)
-                }
             })
         }
     })
@@ -97,35 +118,35 @@ const Profile = () => {
                             <div className="col-xl-6 col-lg-12 col-md-6 col-xsm-6">
                                 <div className="form-group">
                                     <label className="form-label">First Name</label>
-                                    <input 
+                                    <input
                                         onChange={profileForm.handleChange}
                                         onBlur={profileForm.handleBlur}
-                                        value={profileForm.values.first_name}
-                                        type="text" 
-                                        className={`form--control ${profileForm.errors.first_name && profileForm.touched.first_name ? 'border border-danger' : ''}`}
-                                        name="first_name" />
+                                        value={profileForm.values.firstname}
+                                        type="text"
+                                        className={`form--control ${profileForm.errors.firstname && profileForm.touched.firstname ? 'border border-danger' : ''}`}
+                                        name="firstname" />
                                 </div>
                             </div>
                             <div className="col-xl-6 col-lg-12 col-md-6 col-xsm-6">
                                 <div className="form-group">
                                     <label className="form-label">Last Name</label>
-                                    <input 
+                                    <input
                                         onChange={profileForm.handleChange}
                                         onBlur={profileForm.handleBlur}
-                                        value={profileForm.values.last_name}
-                                        type="text" 
-                                        className={`form--control ${profileForm.errors.last_name && profileForm.touched.last_name ? 'border border-danger' : ''}`}
-                                        name="last_name" />
+                                        value={profileForm.values.lastname}
+                                        type="text"
+                                        className={`form--control ${profileForm.errors.lastname && profileForm.touched.lastname ? 'border border-danger' : ''}`}
+                                        name="lastname" />
                                 </div>
                             </div>
                             <div className="col-xl-6 col-lg-12 col-md-6 col-xsm-6">
                                 <div className="form-group">
                                     <label className="form-label">State</label>
-                                    <input 
+                                    <input
                                         onChange={profileForm.handleChange}
                                         onBlur={profileForm.handleBlur}
                                         value={profileForm.values.state}
-                                        type="text" 
+                                        type="text"
                                         className={`form--control ${profileForm.errors.state && profileForm.touched.state ? 'border border-danger' : ''}`}
                                         name="state" />
                                 </div>
@@ -133,11 +154,11 @@ const Profile = () => {
                             <div className="col-xl-6 col-lg-12 col-md-6 col-xsm-6">
                                 <div className="form-group">
                                     <label className="form-label">City</label>
-                                    <input 
+                                    <input
                                         onChange={profileForm.handleChange}
                                         onBlur={profileForm.handleBlur}
                                         value={profileForm.values.city}
-                                        type="text" 
+                                        type="text"
                                         className={`form--control ${profileForm.errors.city && profileForm.touched.city ? 'border border-danger' : ''}`}
                                         name="city" />
                                 </div>
@@ -145,11 +166,11 @@ const Profile = () => {
                             <div className="col-12">
                                 <div className="form-group">
                                     <label className="form-label">Zip Code</label>
-                                    <input 
+                                    <input
                                         onChange={profileForm.handleChange}
                                         onBlur={profileForm.handleBlur}
                                         value={profileForm.values.zip}
-                                        type="text" 
+                                        type="text"
                                         className={`form--control ${profileForm.errors.zip && profileForm.touched.zip ? 'border border-danger' : ''}`}
                                         name="zip" />
                                 </div>
@@ -157,11 +178,11 @@ const Profile = () => {
                             <div className="col-12">
                                 <div className="form-group">
                                     <label className="form-label">Address</label>
-                                    <textarea 
+                                    <textarea
                                         onChange={profileForm.handleChange}
                                         onBlur={profileForm.handleBlur}
                                         value={profileForm.values.address}
-                                        type="text" 
+                                        type="text"
                                         className={`form--control ${profileForm.errors.address && profileForm.touched.address ? 'border border-danger' : ''}`}
                                         name="address"
                                     ></textarea>
@@ -170,25 +191,26 @@ const Profile = () => {
                             <div className="col-12">
                                 <div className="form-group">
                                     <label className="form-label">Profile Picture</label>
-                                    <input 
-                                        onChange={profileForm.handleChange}
+                                    <input
+                                        onChange={(event) => {
+                                            profileForm.setFieldValue('image', event.currentTarget.files[0]);
+                                        }}
                                         onBlur={profileForm.handleBlur}
-                                        value={profileForm.values.image}
-                                        type="file" 
+                                        type="file"
                                         className={`form--control ${profileForm.errors.image && profileForm.touched.image ? 'border border-danger' : ''}`}
-                                        id="imageUpload" 
-                                        name="image" 
+                                        id="imageUpload"
+                                        name="image"
                                         accept=".png, .jpg, .jpeg" />
                                     For optimal results, please upload an image with a 3.5:3 aspect ratio, which will be resized to 350x300 pixels
                                 </div>
                             </div>
-                            <div className="col-sm-4 col-8 d-md-none d-block">
+                            {/* <div className="col-sm-4 col-8 d-md-none d-block">
                                 <div className="mb-3">
                                     <div className="text-center d-block profile-image-preview">
                                         <img src="https://script.viserlab.com/viserbank/demo/assets/images/user/profile/65b42a526ff2f1706306130.jpg" alt="image" className="man-thumb" />
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="col-12">
                                 <button className="btn btn--base w-100" disabled={isLoading} type="submit">
                                     {

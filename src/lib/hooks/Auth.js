@@ -3,14 +3,14 @@ import axiosInstance from "../../api/axiosConfig";
 
 export const AuthApi = {
     login: async (formData) => {
-        return await axiosInstance.post('/api/login', formData)
+        return await axiosInstance.post('/login', formData)
     },
 
     register: async (formData) => {
-        return await axiosInstance.post('/api/register', formData)
+        return await axiosInstance.post('/register', formData)
     },
     
     logout: async (formData) => {
-        return await axiosInstance.get('/api/logout', formData)
+        return await axiosInstance.get('/logout', formData)
     },
 }

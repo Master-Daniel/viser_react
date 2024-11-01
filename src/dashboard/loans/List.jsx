@@ -2,20 +2,37 @@
 import { Link } from 'react-router-dom'
 import MasterLayout from '../../layout/MasterLayout'
 import { useDispatch } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { setPageTitle } from '../../lib/redux/slices/global'
 import Tab from './Tab'
+import { useQuery } from 'react-query'
+import { UserApi } from '../../lib/hooks/User'
 
 const LoanList = () => {
     const dispatch = useDispatch()
+    const [list, setList] = useState([])
+
+    const { refetch } = useQuery('loan-list', UserApi.loanList, {
+        onSuccess: ({ data }) => {
+            if (data.status == 'success') {
+                setList(data.data.loans)
+            }
+        },
+        refetchOnWindowFocus: true,
+    });
 
     useEffect(() => {
         dispatch(setPageTitle('Loan List'))
+        refetch()
     }, [])
+
+    useEffect(() => {
+        console.log(list)
+    }, [list])
 
     return (
         <MasterLayout>
-        <Tab />
+            <Tab />
             <div className="card custom--card overflow-hidden">
                 <div className="card-header">
                     <div className="header-nav mb-0">
@@ -49,39 +66,37 @@ const LoanList = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        #C9UD8WGYAYCD
-                                    </td>
-                                    <td>5%</td>
-                                    <td>
-                                        $3,000.00
-                                    </td>
-                                    <td>
-                                        $210.00
-                                    </td>
-                                    <td>0</td>
-                                    <td>15</td>
-                                    <td> N/A</td>
-                                    <td>$3,150.00</td>
-                                    <td>
-                                        <span className='badge badge--dark'>Pending</span></td>
-                                    <td>
-                                        <div className="dropdown">
-                                            <button aria-expanded="false" className="btn btn--sm btn--base" data-bs-toggle="dropdown" type="button">
-                                                <i className="las la-ellipsis-v m-0"></i>
-                                            </button>
-                                            <div className="dropdown-menu">
-                                                <Link to="/dashboard/loan/details" className="dropdown-item">
-                                                    <i className="las la-list"></i> Details
-                                                </Link>
-                                                <Link className="dropdown-item disabled" to="/dashboard/loan/instalment/logs">
-                                                    <i className="las la-wallet"></i> Installments
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {
+                                    list.data?.length > 0 && list?.data.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>{item.loan_number}</td>
+                                            <td>5%</td>
+                                            <td>{item.amount}</td>
+                                            <td>{item.per_installment}</td>
+                                            <td>{item.given_installment}</td>
+                                            <td>{item.total_installment}</td>
+                                            <td> N/A</td>
+                                            <td>$3,150.00</td>
+                                            <td>
+                                                <span className='badge badge--dark'>Pending</span></td>
+                                            <td>
+                                                <div className="dropdown">
+                                                    <button aria-expanded="false" className="btn btn--sm btn--base" data-bs-toggle="dropdown" type="button">
+                                                        <i className="las la-ellipsis-v m-0"></i>
+                                                    </button>
+                                                    <div className="dropdown-menu">
+                                                        <Link to={`/dashboard/loan/details/${item.loan_number}`} className="dropdown-item">
+                                                            <i className="las la-list"></i> Details
+                                                        </Link>
+                                                        <Link className="dropdown-item disabled" to={`/dashboard/loan/instalment/logs/${item.loan_number}`}>
+                                                            <i className="las la-wallet"></i> Installments
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -101,19 +116,19 @@ const LoanList = () => {
                         <div className="d-none flex-sm-fill d-sm-flex align-items-sm-center justify-content-sm-between">
                             <div>
                                 <p className="small text-muted">
-                                    Showing 
+                                    Showing
                                     <span className="fw-semibold"> 1</span>
-                                    to 
+                                    to
                                     <span className="fw-semibold"> 15</span>
-                                    of 
-                                    <span className="fw-semibold"> 28</span>
-                                    results 
+                                    of
+                                    <span className="fw-semibold">{list.total}</span>
+                                    results
                                 </p>
                             </div>
                             <div>
                                 <ul className="pagination">
-                                    <li className="page-item disabled" aria-disabled="true" aria-label="‹">
-                                        <span className="page-link" aria-hidden="true">&lsaquo;</span>
+                                    <li className="page-item" aria-disabled="true" aria-label="‹">
+                                        <Link to="" className="page-link" aria-hidden="true">&lsaquo;</Link>
                                     </li>
                                     <li className="page-item active" aria-current="page"><span className="page-link">1</span></li>
                                     <li className="page-item"><Link className="page-link" to="/dashboard/loans?page=2">2</Link></li>

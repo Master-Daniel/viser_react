@@ -7,7 +7,7 @@ import AppLayout from "./layout/AppLayout";
 import { useMutation } from "react-query";
 import { AuthApi } from "./lib/hooks/Auth";
 import { CircularProgress } from "@mui/material";
-import { notifyError } from "./util/custom-functions";
+import { notifyError, notifySuccess } from "./util/custom-functions";
 
 const Login = () => {
 
@@ -28,12 +28,22 @@ const Login = () => {
     onSubmit: values => {
       mutate(values, {
         onSuccess: ({ data }) => {
-          localStorage.setItem('token', data.data.access_token)
-          dispatch(setProfile(data.data.user));
-          dispatch(setIsLoggedIn(true));
-          navigate('/dashboard/welcome');
+          if (data.status == 'success') {
+            data.message.success.forEach((message) => {
+              notifySuccess(message)
+            })
+            localStorage.setItem('token', data.data.access_token)
+            dispatch(setProfile(data.data.user));
+            dispatch(setIsLoggedIn(true));
+            navigate('/dashboard/welcome');
+          } else if (data.status == 'error') {
+            data.message.error.forEach((error) => {
+              notifyError(error)
+            })
+          }
         },
-        onError: () => {
+        onError: (error) => {
+          console.log(error)
           notifyError(error.message.error)
         }
       })
@@ -63,12 +73,12 @@ const Login = () => {
                   <div className="col-12">
                     <div className="form-group">
                       <label htmlFor="username" className="form--label">Username or Email</label>
-                      <input 
+                      <input
                         onChange={loginForm.handleChange}
                         onBlur={loginForm.handleBlur}
                         value={loginForm.values.username}
-                        type="text" 
-                        name="username" 
+                        type="text"
+                        name="username"
                         className={`form--control ${loginForm.errors.username && loginForm.touched.username ? 'border border-danger' : ''}`}
                         id="username" />
                     </div>
@@ -76,12 +86,12 @@ const Login = () => {
                   <div className="col-12">
                     <div className="form-group">
                       <label htmlFor="your-password" className="form--label">Password</label>
-                      <input 
+                      <input
                         onChange={loginForm.handleChange}
                         onBlur={loginForm.handleBlur}
                         value={loginForm.values.password}
-                        id="your-password" 
-                        type="password" 
+                        id="your-password"
+                        type="password"
                         className={`form--control ${loginForm.errors.password && loginForm.touched.password ? 'border border-danger' : ''}`}
                         name="password" />
                     </div>
@@ -106,7 +116,7 @@ const Login = () => {
 
                   <div className="col-12">
                     <div className="have-account text-center">
-                      <p className="have-account__text">Don&rsquo;t Have An Account? 
+                      <p className="have-account__text">Don&rsquo;t Have An Account?
                         <Link to="/register" className="have-account__link text--base">&nbsp;Create an Account</Link>
                       </p>
                     </div>
