@@ -4,7 +4,8 @@ const initialState = {
     isLoggedIn: false,
     isModalVisible: false,
     pageTitle: "",
-    profile: null
+    profile: null,
+    loanPlan: {}
 }
 
 export const globalSlice = createSlice({
@@ -22,6 +23,9 @@ export const globalSlice = createSlice({
         },
         setProfile: (state, action) => {
             state.profile = action.payload
+        },
+        setLoanPlan: (state, action) => {
+            state.loanPlan = action.payload
         }
     }
 })
@@ -30,7 +34,8 @@ export const {
     setIsLoggedIn,
     setModalVisible,
     setPageTitle,
-    setProfile
+    setProfile,
+    setLoanPlan
 }  = globalSlice.actions;
 
 export default globalSlice.reducer;

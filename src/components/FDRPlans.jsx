@@ -2,6 +2,12 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setModalVisible } from '../lib/redux/slices/global';
+import { useMutation } from 'react-query';
+import { UserApi } from '../lib/hooks/User';
+import { useFormik } from 'formik';
+import * as Yup from 'yup'
+import { CircularProgress } from "@mui/material";
+import { notifyError, notifySuccess } from '../util/custom-functions';
 
 const FDRPlans = ({ id, title, percentage, duration, returnDays, minimum, maximum }) => {
     const [modalData, setModalData] = useState({
@@ -19,7 +25,7 @@ const FDRPlans = ({ id, title, percentage, duration, returnDays, minimum, maximu
             id,
             minimum,
             maximum,
-            actionUrl: `dashboard/fdr/apply/${id}`,
+            actionUrl: `/fdr/apply/${id}`,
         });
         dispatch(setModalVisible(true));
     };
@@ -27,6 +33,38 @@ const FDRPlans = ({ id, title, percentage, duration, returnDays, minimum, maximu
     const handleClose = () => {
         dispatch(setModalVisible(false));
     };
+
+    const { mutate, isLoading } = useMutation('fdr-apply', UserApi.fdrApply)
+
+    const fdrForm = useFormik({
+        initialValues: {
+            amount: 0,
+            auth_mode: ''
+        },
+        validationSchema: Yup.object().shape({
+            amount: Yup.number().required('Amount is required'),
+            auth_mode: Yup.string().required('Auth mode is required')
+        }),
+        onSubmit: values => {
+            mutate({url: modalData.actionUrl, data: values}, {
+                onSuccess: ({ data }) => {
+                    if (data.status == 'error') {
+                        data.message.error.forEach((error) => {
+                            notifyError(error)
+                        })
+                    } else if (data.status == 'success') {
+                        data.message.success.forEach((message) => {
+                            notifySuccess(message)
+                        })
+                    }
+                }
+            })
+        }
+    })
+
+    const handleSelectedAuthMode = (e) => {
+        fdrForm.setFieldValue('auth_mode', e.target.value);
+    }
 
     return (
         <>
@@ -59,14 +97,6 @@ const FDRPlans = ({ id, title, percentage, duration, returnDays, minimum, maximu
                                 <p className="pricing-card__name">Get Profit Every</p>
                                 <p className="pricing-card_value fs-18 ms-auto">{returnDays} Days</p>
                             </li>
-
-                            <li className="pricing-card__list flex-align">
-                                <span className="pricing-card__icon text-stat">
-                                    <i className="la la-check"></i>
-                                </span>
-                                <p className="pricing-card__name">Profit Rate</p>
-                                <p className="pricing-card_value fs-18 ms-auto">{percentage}%</p>
-                            </li>
                             <li className="pricing-card__list flex-align">
                                 <span className="pricing-card__icon text-stat">
                                     <i className="la la-check"></i>
@@ -89,7 +119,7 @@ const FDRPlans = ({ id, title, percentage, duration, returnDays, minimum, maximu
             <div className={`modal fade custom--modal ${isModalVisible ? "show" : ""}`} id="fdrModal" style={{ display: isModalVisible ? "block" : "none" }}>
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
-                        <form action="" method="post">
+                        <form onSubmit={fdrForm.handleSubmit} method="post">
                             <div className="modal-header">
                                 <h5 className="modal-title method-name">Apply to Open an FDR</h5>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={handleClose}></button>
@@ -98,21 +128,36 @@ const FDRPlans = ({ id, title, percentage, duration, returnDays, minimum, maximu
                                 <div className="form-group mt-0">
                                     <label className="form-label">Amount</label>
                                     <div className="input-group">
-                                        <input type="number" step="any" name="amount" className="form-control form--control" placeholder="Enter An Amount" />
+                                        <input 
+                                            onChange={fdrForm.handleChange}
+                                            onBlur={fdrForm.handleBlur}
+                                            value={fdrForm.values.amount}
+                                            type="number" 
+                                            step="any" 
+                                            name="amount" 
+                                            className={`form-control form--control ${fdrForm.errors.amount && fdrForm.touched.amount ? 'border border-danger' : ''}`}
+                                            placeholder="Enter An Amount" />
                                         <span className="input-group-text"> USD </span>
                                     </div>
-                                    <p><small className="text--danger min-limit mt-2"></small></p>
-                                    <p><small className="text--danger max-limit"></small></p>
+                                    <p><small className="text--danger min-limit mt-2">Minimum Amount {modalData.minimum}</small></p>
+                                    <p><small className="text--danger max-limit">Maximum Amount {modalData.maximum}</small></p>
                                 </div>
                                 <div className="form-group mt-0">
-                                    <label htmlFor="verification" className="form-label">Authorization Mode</label>
-                                    <select name="auth_mode" id="verification" className="form--control select" required>
-                                        <option disabled selected value="">Select One</option>
+                                    <label htmlFor="auth_mode" className="form-label">Authorization Mode</label>
+                                    <select 
+                                        onChange={(e) => handleSelectedAuthMode(e)}
+                                        onBlur={fdrForm.handleBlur}
+                                        name="auth_mode" 
+                                        id="auth_mode" 
+                                        className="form--control select">
+                                        <option value="">Select One</option>
                                         <option value="email">Email</option>
                                         <option value="sms">SMS</option>
                                     </select>
                                 </div>
-                                <button type="submit" className="btn btn-md btn--base w-100">Submit</button>
+                                <button type="submit" className="btn btn-md btn--base w-100" disabled={isLoading}>
+                                    {isLoading ? <CircularProgress size={20} color="inherit" /> : 'Submit'}
+                                </button>
                             </div>
                         </form>
                     </div>

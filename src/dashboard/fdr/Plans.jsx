@@ -38,7 +38,7 @@ const FDRPlansPage = () => {
                         title={plan.name}
                         percentage={plan.interest_rate}
                         returnDays={plan.locked_days}
-                        duration="365"
+                        duration={plan.installment_interval}
                         minimum={plan.minimum_amount}
                         maximum={plan.maximum_amount}
                     />

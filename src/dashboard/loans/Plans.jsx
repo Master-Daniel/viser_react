@@ -5,8 +5,11 @@ import MasterLayout from "../../layout/MasterLayout";
 import Tab from "./Tab";
 import { useQuery } from "react-query";
 import { UserApi } from "../../lib/hooks/User";
+import { useDispatch } from "react-redux";
+import { setPageTitle } from "../../lib/redux/slices/global";
 
 const LoanPlansPage = () => {
+    const dispatch = useDispatch()
     const [plans, setPlans] = useState({ data: [] });
 
     const { refetch } = useQuery('loan-plans', UserApi.loanPlans, {
@@ -19,6 +22,7 @@ const LoanPlansPage = () => {
     });
 
     useEffect(() => {
+        dispatch(setPageTitle('Loan Plan'))
         refetch();
     }, []);
 
@@ -31,9 +35,9 @@ const LoanPlansPage = () => {
                         key={index}
                         id={plan.id}
                         title={plan.name}
-                        percentage="12"
-                        totalDuration="30"
-                        duration="365"
+                        percentage={plan.percent_charge}
+                        totalDuration={plan.total_installment}
+                        duration={plan.installment_interval}
                         minimum={plan.minimum_amount}
                         maximum={plan.maximum_amount}
                     />

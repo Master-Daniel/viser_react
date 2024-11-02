@@ -57,9 +57,6 @@ const Register = () => {
                         navigate('/dashboard/welcome');
                     }
                 },
-                onError: (error) => {
-                    notifyError(error.message.error)
-                }
             })
         }
     })

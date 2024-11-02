@@ -14,7 +14,7 @@ const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate();
 
-  const { mutate, error, isLoading } = useMutation("login", AuthApi.login);
+  const { mutate, isLoading } = useMutation("login", AuthApi.login);
 
   const loginForm = useFormik({
     initialValues: {

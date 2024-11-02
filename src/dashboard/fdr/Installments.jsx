@@ -2,15 +2,29 @@
 import { useDispatch } from 'react-redux'
 import MasterLayout from '../../layout/MasterLayout'
 import { Link } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { setPageTitle } from '../../lib/redux/slices/global'
 import Tab from './Tab'
+import { useQuery } from 'react-query'
+import { UserApi } from '../../lib/hooks/User'
 
 const Installments = () => {
 
     const dispatch = useDispatch()
+    const [logs, setLogs] = useState([])
+
+    const { refetch } = useQuery('fdr-installment-log', UserApi.fdrInstalmentLogs, {
+        onSuccess: ({ data }) => {
+            console.log(data.data.fdr)
+            if (data.status == 'success') {
+                setLogs(data.data.fdr)
+            }
+        },
+        refetchOnWindowFocus: true,
+    });
 
     useEffect(() => {
+        refetch()
         dispatch(setPageTitle('FDR Installments'))
     }, [])
 

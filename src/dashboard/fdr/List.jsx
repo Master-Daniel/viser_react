@@ -7,13 +7,14 @@ import { setPageTitle } from '../../lib/redux/slices/global'
 import Tab from './Tab'
 import { useQuery } from 'react-query'
 import { UserApi } from '../../lib/hooks/User'
+import { formatDate } from '../../util/custom-functions'
 
 const FDRList = () => {
 
     const dispatch = useDispatch()
     const [list, setList] = useState([])
 
-    const { refetch } = useQuery('loan-list', UserApi.fdrList, {
+    const { refetch } = useQuery('fdr-list', UserApi.fdrList, {
         onSuccess: ({ data }) => {
             console.log(data.data.fdr)
             if (data.status == 'success') {
@@ -52,7 +53,6 @@ const FDRList = () => {
                             <thead>
                                 <tr>
                                     <th>FDR No.</th>
-                                    <th>Rate</th>
                                     <th>Amount</th>
                                     <th>Installment</th>
                                     <th>Next Installment</th>
@@ -67,12 +67,11 @@ const FDRList = () => {
                                     list.data > 0 && list.data.map((item, index) => (
                                         <tr key={index}>
                                             <td>{item.fdr_number}</td>
-                                            <td>5%</td>
                                             <td>
-                                                <span className="fw-semibold">{item.amount}</span>
+                                                <span className="fw-semibold">{item.amount.toFixed(2)}</span>
                                             </td>
-                                            <td>$2.00 /30 Days</td>
-                                            <td>N/A</td>
+                                            <td>$2.00 /{item.installment_interval} Days</td>
+                                            <td>{formatDate(item.next_installment_date)}</td>
                                             <td>{item.locked_date}</td>
                                             <td><span className="badge badge--dark">{item.status}</span></td>
                                             <td>{item.created_at}</td>

@@ -18,6 +18,18 @@ export const UserApi = {
     changePassword: async (formData) => {
         return await axiosInstance.post('/change-password', formData)
     },
+    
+    loanApplication: async (form) => {
+        return await axiosInstance.post(form.url, form.data)
+    },
+    
+    loanConfirm: async (form) => {
+        return await axiosInstance.post(form.url, form.data)
+    },
+    
+    fdrApply: async (form) => {
+        return await axiosInstance.post(form.url, form.data)
+    },
 
     withdrawMethods: async () => {
         return await axiosInstance.get('/withdraw-method')
@@ -45,6 +57,10 @@ export const UserApi = {
     
     transferHistory: async () => {
         return await axiosInstance.get('/transfer/history')
+    },
+    
+    fdrInstalmentLogs: async (id) => {
+        return await axiosInstance.get(`/fdr/installment/logs/${id}`)
     },
     
     withdrawHistory: async () => {

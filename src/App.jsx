@@ -24,6 +24,7 @@ import Withdraw from './dashboard/withdraw/withdraw';
 import Register from './Register';
 import DepositHistory from './dashboard/deposit/history';
 import Deposit from './dashboard/deposit/deposit';
+import LoanPreview from './dashboard/loans/LoanPreview';
 
 const App = () => {
   return (
@@ -81,6 +82,11 @@ const App = () => {
       <Route path="/dashboard/loan/plans" element={
         <PrivateRoute>
           <LoanPlansPage />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/loan/application-preview" element={
+        <PrivateRoute>
+          <LoanPreview />
         </PrivateRoute>
       } />
       <Route path="/dashboard/dps/list" element={

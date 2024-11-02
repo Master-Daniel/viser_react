@@ -16,7 +16,6 @@ const TransfersList = () => {
 
     const { refetch } = useQuery('transfer-history', UserApi.transferHistory, {
         onSuccess: ({ data }) => {
-            console.log(data)
             if (data.status == 'success') {
                 setList(data.data.transfers)
             }
@@ -54,7 +53,6 @@ const TransfersList = () => {
                                 <tr>
                                     <th>TRX No.</th>
                                     <th>Time</th>
-                                    <th>Recipient</th>
                                     <th>Account No.</th>
                                     <th>Bank</th>
                                     <th>Amount</th>
@@ -65,16 +63,13 @@ const TransfersList = () => {
                             </thead>
                             <tbody>
                                 {
-                                    list.data.length > 0 && list.data.map((item, index) => (
+                                    list.data?.length > 0 && list.data.map((item, index) => (
                                         <tr key={index}>
                                             <td>
                                                 <span className="text--dark fw-bold">#{item.trx}</span>
                                             </td>
                                             <td>
                                                 <em>{formatDate(item.created_at)}</em>
-                                            </td>
-                                            <td>
-                                                <span className="text--base fw-bold">Calista Mills</span>
                                             </td>
                                             <td>
                                                 4654654651544

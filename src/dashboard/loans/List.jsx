@@ -7,6 +7,7 @@ import { setPageTitle } from '../../lib/redux/slices/global'
 import Tab from './Tab'
 import { useQuery } from 'react-query'
 import { UserApi } from '../../lib/hooks/User'
+import { formatDate } from '../../util/custom-functions'
 
 const LoanList = () => {
     const dispatch = useDispatch()
@@ -54,7 +55,6 @@ const LoanList = () => {
                             <thead>
                                 <tr>
                                     <th>Loan No.</th>
-                                    <th>Rate</th>
                                     <th>Amount</th>
                                     <th>Installment</th>
                                     <th>Given</th>
@@ -69,16 +69,15 @@ const LoanList = () => {
                                 {
                                     list.data?.length > 0 && list?.data.map((item, index) => (
                                         <tr key={index}>
-                                            <td>{item.loan_number}</td>
-                                            <td>5%</td>
-                                            <td>{item.amount}</td>
-                                            <td>{item.per_installment}</td>
-                                            <td>{item.given_installment}</td>
-                                            <td>{item.total_installment}</td>
-                                            <td> N/A</td>
+                                            <td>#{item.loan_number}</td>
+                                            <td>{Number(item.amount).toFixed(2)}</td>
+                                            <td>{Number(item.installment_interval).toFixed(2)}</td>
+                                            <td>{Number(item.given_installment).toFixed(2)}</td>
+                                            <td>{Number(item.total_installment).toFixed(2)}</td>
+                                            <td></td>
                                             <td>$3,150.00</td>
                                             <td>
-                                                <span className='badge badge--dark'>Pending</span></td>
+                                                <span className='badge badge--dark'>{item.status}</span></td>
                                             <td>
                                                 <div className="dropdown">
                                                     <button aria-expanded="false" className="btn btn--sm btn--base" data-bs-toggle="dropdown" type="button">
