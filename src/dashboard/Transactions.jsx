@@ -2,15 +2,30 @@
 import { Link } from "react-router-dom"
 import MasterLayout from "../layout/MasterLayout"
 import { useDispatch } from "react-redux"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { setPageTitle } from "../lib/redux/slices/global"
+import { useQuery } from "react-query"
+import { UserApi } from "../lib/hooks/User"
+import { formatDate } from "../util/custom-functions"
 
 const Transactions = () => {
     const dispatch = useDispatch()
+    const [history, setHistory] = useState([])
+
+    const { refetch } = useQuery('transaction-history', UserApi.transactionHistory, {
+        onSuccess: ({ data }) => {
+            if (data.status == 'success') {
+                setHistory(data.data.transactions)
+            }
+        }
+    })
 
     useEffect(() => {
+        refetch()
         dispatch(setPageTitle('Transactions'))
     }, [])
+
+
     return (
         <MasterLayout>
             <div className="row justify-content-center">
@@ -84,38 +99,19 @@ const Transactions = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                #B7OTTUNJT4JO
-                                            </td>
-                                            <td>
-                                                2024-08-08 12:10 PM
-                                            </td>
-                                            <td>
-                                                <span className=" text--danger ">
-                                                    - $80.00
-                                                </span>
-                                            </td>
-                                            <td>
-                                                $61.80
-                                            </td>
-                                            <td>DPS installment paid</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                #7D1UOKVF8JSO
-                                            </td>
-                                            <td>
-                                                2024-08-08 12:10 PM
-                                            </td>
-                                            <td>
-                                                <span className=" text--danger ">- $80.00</span>
-                                            </td>
-                                            <td>
-                                                $141.80
-                                            </td>
-                                            <td>DPS installment paid</td>
-                                        </tr>
+                                        {
+                                            history.data?.length > 0 && history.data.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td>#{item.trx}</td>
+                                                    <td>{formatDate(item.created_at)}</td>
+                                                    <td>
+                                                        <span className=" text--danger ">${Number(item.amount).toFixed(2)}</span>
+                                                    </td>
+                                                    <td>${Number(item.post_balance).toFixed(2)}</td>
+                                                    <td>{item.details}</td>
+                                                </tr>
+                                            ))
+                                        }
                                     </tbody>
                                 </table>
                             </div>

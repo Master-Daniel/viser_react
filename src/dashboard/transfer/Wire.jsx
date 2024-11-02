@@ -1,17 +1,69 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import MasterLayout from "../../layout/MasterLayout"
 import Tab from "./Tab"
 import { setPageTitle } from "../../lib/redux/slices/global"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { UserApi } from "../../lib/hooks/User"
+import { useMutation, useQuery } from "react-query"
+import { useFormik } from "formik"
+import * as Yup from 'yup';
+import { notifyError, notifySuccess } from "../../util/custom-functions"
+import { CircularProgress } from "@mui/material"
 
 const WireTransfer = () => {
 
     const dispatch = useDispatch()
+    const [wireData, setWireData] = useState([])
+    const { profile } = useSelector((state) => state.global)
+
+    const { refetch } = useQuery('fetch-wire-form', UserApi.fetchWireTransferData, {
+        onSuccess: ({ data }) => {
+            if (data.status == 'success') {
+                setWireData(data.data.setting)
+            }
+        }
+    })
 
     useEffect(() => {
+        refetch()
         dispatch(setPageTitle('Wire Transfer'))
     }, [])
+
+    const { mutate, isLoading } = useMutation("wire-transfer", UserApi.wireTransfer);
+
+    const wireForm = useFormik({
+        initialValues: {
+            amount: '',
+            account_name: '',
+            account_number: '',
+            bank_name: '',
+            auth_mode: '',
+        },
+        validationSchema: Yup.object().shape({
+            amount: Yup.number().required('Amount is required'),
+            account_name: Yup.string().required('Account name is required'),
+            account_number: Yup.string().required('Account number is required'),
+            bank_name: Yup.string().required('Bank name is required'),
+            auth_mode: Yup.string().required('Auth mode is required'),
+        }),
+        onSubmit: values => {
+            mutate(values, {
+                onSuccess: ({ data }) => {
+                    if (data.status == 'error') {
+                        data.message.error.forEach((error) => {
+                            notifyError(error)
+                        })
+                    } else {
+                        data.message.success.forEach((message) => {
+                            notifySuccess(message)
+                            wireForm.resetForm()
+                        })
+                    }
+                }
+            })
+        }
+    })
 
     return (
         <MasterLayout>
@@ -24,37 +76,37 @@ const WireTransfer = () => {
                             <ul>
                                 <li className="pricing-card__list flex-between">
                                     <span>Minimum Per Transaction</span>
-                                    <span className="fw-bold">$1.00</span>
+                                    <span className="fw-bold">${wireData.minimum_limit}</span>
                                 </li>
                                 <li className="pricing-card__list flex-between">
                                     <span>Maximum Per Transaction</span>
-                                    <span className="fw-bold">$10,000.00</span>
+                                    <span className="fw-bold">${wireData.maximum_limit}</span>
                                 </li>
                                 <li className="pricing-card__list flex-between">
                                     <span>Daily Maximum</span>
-                                    <span className="fw-bold">$100,000.00</span>
+                                    <span className="fw-bold">${wireData.daily_maximum_limit}</span>
                                 </li>
                                 <li className="pricing-card__list flex-between">
                                     <span>Monthly Maximum</span>
-                                    <span className="fw-bold">$100,000.00</span>
+                                    <span className="fw-bold">${wireData.monthly_maximum_limit}</span>
                                 </li>
                                 <li className="pricing-card__list flex-between">
                                     <span>Daily Maximum Transaction</span>
-                                    <span className="fw-bold">10</span>
+                                    <span className="fw-bold">{wireData.daily_total_transaction}</span>
                                 </li>
                                 <li className="pricing-card__list flex-between">
                                     <span> Monthly Maximum Transaction</span>
-                                    <span className="fw-bold">50</span>
+                                    <span className="fw-bold">{wireData.monthly_total_transaction}</span>
                                 </li>
                             </ul>
-                            <small className="text--danger">* Charge 2%</small>
+                            <small className="text--danger">* Charge {wireData.percent_charge}%</small>
                         </div>
                     </div>
 
                     <div className="card custom--card mt-3">
                         <div className="card-body">
                             <h6 className="card-title text-center">Instruction</h6>
-                            <p><div style="text-align: left;"><br /></div></p>
+                            <p><div style={{ textAlign: 'left' }}><br />{wireData.instruction}</div></p>
                         </div>
                     </div>
                 </div>
@@ -63,58 +115,69 @@ const WireTransfer = () => {
                     <div className="card custom--card">
                         <div className="card-body">
                             <div className="text-center">
-                                <div style="text-align: left;"><br /></div>
+                                <div style={{ textAlign: 'left' }}><br /></div>
                             </div>
-                            <form method="POST">
+                            <form method="POST" onSubmit={wireForm.handleSubmit}>
                                 <div className="form-group">
                                     <label className="form-label">Amount</label>
                                     <div className="input-group custom-input-group">
-                                        <input type="number" step="any" className="form-control form--control" name="amount" />
+                                        <input
+                                            type="number"
+                                            step="any"
+                                            onChange={wireForm.handleChange}
+                                            onBlur={wireForm.handleBlur}
+                                            value={wireForm.values.amount}
+                                            className={`form--control form-control ${wireForm.errors.amount && wireForm.touched.amount ? 'border border-danger' : ''}`}
+                                            name="amount" />
                                         <span className="input-group-text">USD</span>
                                     </div>
-                                    <span className="fw-bold  text--info ">Current Balance: $61.80</span>
+                                    <span className="fw-bold  text--info ">Current Balance: ${profile.balance}</span>
                                 </div>
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="form-group">
                                             <label className="form-label form--label">Account Name   </label>
-                                            <input type="text" className="form-control form--control" name="account_name" />
+                                            <input
+                                                type="text"
+                                                onChange={wireForm.handleChange}
+                                                onBlur={wireForm.handleBlur}
+                                                value={wireForm.values.account_name}
+                                                className={`form--control form-control ${wireForm.errors.account_name && wireForm.touched.account_name ? 'border border-danger' : ''}`}
+                                                name="account_name" />
                                         </div>
                                     </div>
                                     <div className="col-md-12">
                                         <div className="form-group">
                                             <label className="form-label form--label">Account Number   </label>
-                                            <input type="text" className="form-control form--control" name="account_number" />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-12">
-                                        <div className="form-group">
-                                            <label className="form-label form--label">Full Name   </label>
-                                            <input type="text" className="form-control form--control" name="full_name" />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-12">
-                                        <div className="form-group">
-                                            <label className="form-label form--label">Phone Number   </label>
-                                            <input type="text" className="form-control form--control" name="phone_number" />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-12">
-                                        <div className="form-group">
-                                            <label className="form-label form--label">SWIFT Code or IBAN Number   </label>
-                                            <input type="text" className="form-control form--control" name="swift_code_or_iban_number" />
+                                            <input
+                                                type="text"
+                                                onChange={wireForm.handleChange}
+                                                onBlur={wireForm.handleBlur}
+                                                value={wireForm.values.account_number}
+                                                className={`form--control form-control ${wireForm.errors.account_number && wireForm.touched.account_number ? 'border border-danger' : ''}`}
+                                                name="account_number" />
                                         </div>
                                     </div>
                                 </div>
                                 <div className="form-group mt-0">
                                     <label htmlFor="verification" className="form-label">Authorization Mode</label>
-                                    <select name="auth_mode" id="verification" className="form--control select" required>
-                                        <option disabled selected value="">Select One</option>
+                                    <select
+                                        name="auth_mode"
+                                        id="verification"
+                                        onChange={wireForm.handleChange}
+                                        onBlur={wireForm.handleBlur}
+                                        value={wireForm.values.auth_mode}
+                                        className={`form--control form-control ${wireForm.errors.auth_mode && wireForm.touched.auth_mode ? 'border border-danger' : ''}`}>
+                                        <option value="">Select One</option>
                                         <option value="email">Email</option>
                                         <option value="sms">SMS</option>
                                     </select>
                                 </div>
-                                <button type="submit" className="btn btn--base w-100 ">Submit</button>
+                                <button type="submit" className="btn btn--base w-100" disabled={isLoading}>
+                                    {
+                                        isLoading ? <CircularProgress size={20} color="inherit" /> : 'Submit'
+                                    }
+                                </button>
                             </form>
                         </div>
                     </div>

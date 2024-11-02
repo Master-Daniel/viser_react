@@ -79,11 +79,11 @@ const TransfersList = () => {
                                                 <br />
                                                 <button className="badge badge--info wire-transfer" data-id="213" type="button"> <i className="la la-eye"></i> Recipient Info</button>
                                             </td>
-                                            <td>$50.00</td>
-                                            <td>$1.00</td>
+                                            <td>${Number(item.amount).toFixed(2)}</td>
+                                            <td>${Number(item.charge).toFixed(2)}</td>
                                             <td>$51.00</td>
                                             <td>
-                                                <span className="badge badge--warning">Pending</span>
+                                                <span className="badge badge--warning">{item.status}</span>
                                             </td>
                                         </tr>
                                     ))
