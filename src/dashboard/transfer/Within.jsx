@@ -30,7 +30,7 @@ const WithinTransfer = () => {
                 <div className="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
                     <h6 className="card-title mb-0">Beneficiaries</h6>
                     <div className="header-nav mb-0">
-                        <Link className="btn btn-sm btn--dark" to="/dashboard/beneficiary/own-bank/beneficiaries"> <i className="la la-users"></i> Manage Beneficiaries</Link>
+                        <Link className="btn btn-sm btn--dark" to="/dashboard/transfer/beneficiaries"> <i className="la la-users"></i> Manage Beneficiaries</Link>
                     </div>
                 </div>
                 <div className="card-body p-0">

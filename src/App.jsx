@@ -25,6 +25,7 @@ import Register from './Register';
 import DepositHistory from './dashboard/deposit/history';
 import Deposit from './dashboard/deposit/deposit';
 import LoanPreview from './dashboard/loans/LoanPreview';
+import Beneficiaries from './dashboard/transfer/beneficiaries';
 
 const App = () => {
   return (
@@ -117,6 +118,11 @@ const App = () => {
       <Route path="/dashboard/transfer/wire" element={
         <PrivateRoute>
           <WireTransfer />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/transfer/beneficiaries" element={
+        <PrivateRoute>
+          <Beneficiaries />
         </PrivateRoute>
       } />
       <Route path="/dashboard/transactions" element={

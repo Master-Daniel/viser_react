@@ -25,6 +25,10 @@ export const UserApi = {
         return await axiosInstance.post('/change-password', formData)
     },
     
+    addBeneficiary: async (formData) => {
+        return await axiosInstance.post('/beneficiary/own', formData)
+    },
+    
     depositInsert: async (formData) => {
         return await axiosInstance.post('/deposit/insert', formData)
     },

@@ -39,7 +39,7 @@ const Others = () => {
             <div className="card custom--card overflow-hidden">
                 <div className="card-header">
                     <div className="header-nav mb-0">
-                        <Link className="btn btn-sm btn--dark" to="/dashboard/transfer/other-bank/beneficiaries"> <i className="la la-users"></i> Manage Beneficiaries</Link>
+                        <Link className="btn btn-sm btn--dark" to="/dashboard/transfer/beneficiaries"> <i className="la la-users"></i> Manage Beneficiaries</Link>
                     </div>
                 </div>
 
