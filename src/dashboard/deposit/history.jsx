@@ -22,7 +22,7 @@ const DepositHistory = () => {
                         <button className="btn btn--base" type="submit"><i className="la la-search"></i></button>
                     </div>
                 </form>
-                <Link className="btn btn--base" href="/dashboard/deposit"><i className="las la-plus"></i> Deposit Now</Link>
+                <Link className="btn btn--base" to="/dashboard/deposit/"><i className="las la-plus"></i> Deposit Now</Link>
             </div>
             <div className="card-body p-0">
                 <div className="table-responsive">

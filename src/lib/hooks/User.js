@@ -25,6 +25,10 @@ export const UserApi = {
         return await axiosInstance.post('/change-password', formData)
     },
     
+    depositInsert: async (formData) => {
+        return await axiosInstance.post('/deposit/insert', formData)
+    },
+    
     wireTransfer: async (formData) => {
         return await axiosInstance.post('/wire-transfer/request', formData)
     },
