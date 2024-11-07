@@ -66,12 +66,12 @@ const Navigation = () => {
                         </Link>
                     </li>
 
-                    <li className={`sidebar-menu-list__item ${menuActive('dps')}`}>
+                    {/* <li className={`sidebar-menu-list__item ${menuActive('dps')}`}>
                         <Link to="/dashboard/dps/list" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-piggy-bank"></i></span>
                             <span className="text">DPS</span>
                         </Link>
-                    </li>
+                    </li> */}
 
                     <li className={`sidebar-menu-list__item ${menuActive('loan')}`}>
                         <Link to="/dashboard/loan/list" className="sidebar-menu-list__link">
@@ -80,12 +80,12 @@ const Navigation = () => {
                         </Link>
                     </li>
 
-                    <li className={`sidebar-menu-list__item ${menuActive('mobile-top-up')}`}>
+                    {/* <li className={`sidebar-menu-list__item ${menuActive('mobile-top-up')}`}>
                         <Link to="/dashboard/mobile-top-up" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-mobile-alt"></i></span>
                             <span className="text">Airtime</span>
                         </Link>
-                    </li>
+                    </li> */}
 
                     <li className={`sidebar-menu-list__item ${menuActive('transfer')}`}>
                         <Link to="/dashboard/transfer/all" className="sidebar-menu-list__link">
@@ -101,12 +101,12 @@ const Navigation = () => {
                         </Link>
                     </li>
 
-                    <li className="sidebar-menu-list__item {{ menuActive('user.referral.users') }}">
+                    {/* <li className="sidebar-menu-list__item {{ menuActive('user.referral.users') }}">
                         <Link to="" className="sidebar-menu-list__link">
                             <span className="icon"><i className="las la-user-friends"></i></span>
                             <span className="text">Referral</span>
                         </Link>
-                    </li>
+                    </li> */}
 
                     <li className={`sidebar-menu-list__item ${menuActive('support')}`}>
                         <Link to="/dashboard/support/list" className="sidebar-menu-list__link">

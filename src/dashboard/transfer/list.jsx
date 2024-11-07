@@ -8,6 +8,7 @@ import { setPageTitle } from "../../lib/redux/slices/global"
 import { UserApi } from "../../lib/hooks/User"
 import { useQuery } from "react-query"
 import { formatDate } from "../../util/custom-functions"
+import Pagination from "../../components/Pagination"
 
 const TransfersList = () => {
 
@@ -93,43 +94,7 @@ const TransfersList = () => {
                     </div>
                 </div>
                 <div className="card-footer">
-                    <nav className="d-flex justify-items-center justify-content-between">
-                        <div className="d-flex justify-content-between flex-fill d-sm-none">
-                            <ul className="pagination">
-                                <li className="page-item disabled" aria-disabled="true">
-                                    <span className="page-link">‹</span>
-                                </li>
-                                <li className="page-item">
-                                    <a className="page-link" href="/dashboard/transfer/all?page=2" rel="next">›</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="d-none flex-sm-fill d-sm-flex align-items-sm-center justify-content-sm-between">
-                            <div>
-                                <p className="small text-muted">
-                                    Showing
-                                    <span className="fw-semibold">1</span>
-                                    to
-                                    <span className="fw-semibold">15</span>
-                                    of
-                                    <span className="fw-semibold">29</span>
-                                    results
-                                </p>
-                            </div>
-                            <div>
-                                <ul className="pagination">
-                                    <li className="page-item disabled" aria-disabled="true" aria-label="‹">
-                                        <span className="page-link" aria-hidden="true">&lsaquo;</span>
-                                    </li>
-                                    <li className="page-item active" aria-current="page"><span className="page-link">1</span></li>
-                                    <li className="page-item"><Link className="page-link" to="/dashboard/transfer/all?page=2">2</Link></li>
-                                    <li className="page-item">
-                                        <Link className="page-link" to="/dashboard/transfer/all?page=2" rel="next" aria-label="›">&rsaquo;</Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </nav>
+                    {/* <Pagination /> */}
                 </div>
             </div>
         </MasterLayout>

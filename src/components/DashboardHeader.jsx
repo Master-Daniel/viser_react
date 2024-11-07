@@ -26,12 +26,6 @@ const DashboardHeader = () => {
                         <h4 className="dashboard-header__title mb-0">{pageTitle}</h4>
                     </div>
                 </div>
-
-                <div className="col-6 col-lg-3 text-end order-lg-3 order-2">
-                    <select className="select-lang rounded-2 langSel">
-                        <option value="{{ $item->code }}">Select Language</option>
-                    </select>
-                </div>
                 
                 {isSettingsPage && <Tab />}
                 {isDSPPage && <DSPTab />}

@@ -72,7 +72,7 @@ const Welcome = () => {
                     </div>
                 </div>
 
-                <DashboardCard
+                {/* <DashboardCard
                     title="Pending Deposits"
                     icon="wallet"
                     amount="0"
@@ -106,11 +106,11 @@ const Welcome = () => {
                     title="Running Loan"
                     icon="hand-holding-usd"
                     amount="0"
-                />
+                /> */}
 
                 <div className="pt-60">
                     <div className="row gy-4 justify-content-center">
-                        <div className="col-xxl-6">
+                        {/* <div className="col-xxl-6">
                             <div className="dashboard-table">
                                 <h5 className="dashboard-table__title card-header__title text-dark">
                                     Latest Credits
@@ -120,7 +120,7 @@ const Welcome = () => {
                                         <tr>
                                             <th>S.N.</th>
                                             <th>Date</th>
-                                            {/* <th>Trx</th> */}
+                                            <th>Trx</th>
                                             <th>Amount</th>
                                         </tr>
                                     </thead>
@@ -129,13 +129,13 @@ const Welcome = () => {
                                             <td>C69F8RX238KR</td>
                                             <td>08 Aug, 2024 12:08 PM</td>
                                             <td>$200.00</td>
-                                            {/* <td className="fw-bold">
+                                            <td className="fw-bold">
                                         {{ showAmount($credit->amount) }} {{ __($general->cur_text) }}
-                                    </td> */}
+                                    </td>
                                         </tr>
-                                        {/* <tr>
+                                        <tr>
                                     <td colspan="100%" className="text-center">{{ __($emptyMessage) }}</td>
-                                </tr> */}
+                                </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -150,7 +150,7 @@ const Welcome = () => {
                                         <tr>
                                             <th>S.N.</th>
                                             <th>Date</th>
-                                            {/* <th>Trx</th> */}
+                                            <th>Trx</th>
                                             <th>Amount</th>
                                         </tr>
                                     </thead>
@@ -159,17 +159,17 @@ const Welcome = () => {
                                             <td>C69F8RX238KR</td>
                                             <td>08 Aug, 2024 12:08 PM</td>
                                             <td>$200.00</td>
-                                            {/* <td className="fw-bold">
+                                            <td className="fw-bold">
                                         {{ showAmount($credit->amount) }} {{ __($general->cur_text) }}
-                                    </td> */}
+                                    </td>
                                         </tr>
-                                        {/* <tr>
+                                        <tr>
                                     <td colspan="100%" className="text-center">{{ __($emptyMessage) }}</td>
-                                </tr> */}
+                                </tr>
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

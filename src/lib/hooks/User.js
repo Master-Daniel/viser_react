@@ -57,6 +57,10 @@ export const UserApi = {
         return await axiosInstance.get('/deposit/methods')
     },
     
+    depositHistory: async () => {
+        return await axiosInstance.get('/deposit/manual')
+    },
+    
     loanPlans: async () => {
         return await axiosInstance.get('/loan/plans')
     },

@@ -8,6 +8,7 @@ import Tab from './Tab'
 import { useQuery } from 'react-query'
 import { UserApi } from '../../lib/hooks/User'
 import { formatDate } from '../../util/custom-functions'
+import Pagination from '../../components/Pagination'
 
 const LoanList = () => {
     const dispatch = useDispatch()
@@ -60,9 +61,9 @@ const LoanList = () => {
                                     <th>Given</th>
                                     <th>Total</th>
                                     <th>Next Installment</th>
-                                    <th>Total Payable</th>
+                                    {/* <th>Total Payable</th> */}
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    {/* <th>Action</th> */}
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,10 +76,9 @@ const LoanList = () => {
                                             <td>{Number(item.given_installment).toFixed(2)}</td>
                                             <td>{Number(item.total_installment).toFixed(2)}</td>
                                             <td></td>
-                                            <td>$3,150.00</td>
-                                            <td>
-                                                <span className='badge badge--dark'>{item.status}</span></td>
-                                            <td>
+                                            {/* <td>$3,150.00</td> */}
+                                            <td><span className='badge badge--dark'>{item.status}</span></td>
+                                            {/* <td>
                                                 <div className="dropdown">
                                                     <button aria-expanded="false" className="btn btn--sm btn--base" data-bs-toggle="dropdown" type="button">
                                                         <i className="las la-ellipsis-v m-0"></i>
@@ -92,7 +92,7 @@ const LoanList = () => {
                                                         </Link>
                                                     </div>
                                                 </div>
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     ))
                                 }
@@ -101,43 +101,7 @@ const LoanList = () => {
                     </div>
                 </div>
                 <div className="card-footer">
-                    <nav className="d-flex justify-items-center justify-content-between">
-                        <div className="d-flex justify-content-between flex-fill d-sm-none">
-                            <ul className="pagination">
-                                <li className="page-item disabled" aria-disabled="true">
-                                    <span className="page-link">‹</span>
-                                </li>
-                                <li className="page-item">
-                                    <Link className="page-link" to="/dashboard/loans?page=2" rel="next">›</Link>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="d-none flex-sm-fill d-sm-flex align-items-sm-center justify-content-sm-between">
-                            <div>
-                                <p className="small text-muted">
-                                    Showing
-                                    <span className="fw-semibold"> 1</span>
-                                    to
-                                    <span className="fw-semibold"> 15</span>
-                                    of
-                                    <span className="fw-semibold">{list.total}</span>
-                                    results
-                                </p>
-                            </div>
-                            <div>
-                                <ul className="pagination">
-                                    <li className="page-item" aria-disabled="true" aria-label="‹">
-                                        <Link to="" className="page-link" aria-hidden="true">&lsaquo;</Link>
-                                    </li>
-                                    <li className="page-item active" aria-current="page"><span className="page-link">1</span></li>
-                                    <li className="page-item"><Link className="page-link" to="/dashboard/loans?page=2">2</Link></li>
-                                    <li className="page-item">
-                                        <Link className="page-link" to="/dashboard/loans?page=2" rel="next" aria-label="›">&rsaquo;</Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </nav>
+                    {/* <Pagination /> */}
                 </div>
             </div>
         </MasterLayout>

@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useMutation } from 'react-query';
 import { UserApi } from '../lib/hooks/User';
-import { notifyError, notifySuccess } from '../util/custom-functions';
+import { notifyError } from '../util/custom-functions';
 import { CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
