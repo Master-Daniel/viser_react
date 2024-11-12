@@ -10,6 +10,7 @@
   <link href="assets/css/line-awesome.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="assets/css/icon-moon.css" />
+  <link href="assets/css/otp_timer.css" rel="stylesheet">
   <link href="assets/css/custom.css" rel="stylesheet">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,7 +22,24 @@
         font-size: 10px;
       }
     }
+    .animation-circle {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 4px solid #f44336;
+      height: 100%;
+      width: 100%;
+      border-radius: 150px;
+      box-shadow: 1px 1px 1px 1px rgba(255, 0, 0, 0.5);
+      transform: rotateY(180deg);
+      animation-name: clipCircle;
+      animation-duration: 296s;
+      animation-iteration-count: 1;
+      animation-timing-function: cubic-bezier(0, 0, 1, 1);
+      z-index: 1;
+    }
   </style>
+  <link href="assets/css/verification-code.css" rel="stylesheet">
 </head>
 
 <body>

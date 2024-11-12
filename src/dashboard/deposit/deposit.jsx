@@ -6,9 +6,13 @@ import { useEffect, useState } from "react";
 import { notifyError, notifySuccess } from "../../util/custom-functions";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import QRCode from "react-qr-code";
+import { setDepositDetails, setDepositMethods, setPageTitle } from "../../lib/redux/slices/global";
 
 const Deposit = () => {
-    const [methods, setMethods] = useState([]);
+    const dispatch = useDispatch()
+    const { depositMethods } = useSelector((state) => state.global)
     const [selectedGateway, setSelectedGateway] = useState(null);
     const [amount, setAmount] = useState(0);
     const [totalCharge, setTotalCharge] = useState(0);
@@ -17,18 +21,20 @@ const Deposit = () => {
 
     const { refetch } = useQuery('deposit-methods', UserApi.depositMethods, {
         onSuccess: ({ data }) => {
-            setMethods(data.data.methods);
+            dispatch(setDepositMethods(data.data.methods));
         },
-        refetchOnWindowFocus: true,
+        refetchOnWindowFocus: false,
     });
 
     useEffect(() => {
         refetch();
+        dispatch(setPageTitle('Deposit'))
     }, []);
 
     useEffect(() => {
         if (selectedGateway) {
             calculateCharges();
+            console.log(selectedGateway)
         }
     }, [amount, selectedGateway]);
 
@@ -60,6 +66,11 @@ const Deposit = () => {
         } else if (amount == 0) {
             notifyError(`Amount must not be less than $${Number(selectedGateway.min_amount).toFixed(2)}`)
         } else {
+            console.log({
+                amount: amount,
+                currency: selectedGateway.currency,
+                method_code: selectedGateway.method.code
+            })
             mutate({
                 amount: amount,
                 currency: selectedGateway.currency,
@@ -71,10 +82,11 @@ const Deposit = () => {
                             notifyError(error)
                         })
                     } else {
+                        dispatch(setDepositDetails(data.data.deposit))
                         data.message.success.forEach((message) => {
                             notifySuccess(message)
                         })
-                        navigation('/dashboard/deposit/history')
+                        navigation('/dashboard/deposit/confirm')
                     }
                 }
             })
@@ -90,7 +102,7 @@ const Deposit = () => {
                             <div className="row justify-content-center gy-sm-4 gy-3">
                                 <div className="col-xxl-4 col-xl-5">
                                     <div className="payment-system-list is-scrollable gateway-option-list">
-                                        {methods.map((method, index) => (
+                                        {depositMethods.map((method, index) => (
                                             <label key={index} htmlFor={`bank_${index}`} className="payment-item gateway-option">
                                                 <div className="payment-item__info">
                                                     <span className="payment-item__check"></span>

@@ -1,11 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import MasterLayout from "../../layout/MasterLayout";
 import { UserApi } from "../../lib/hooks/User";
 import { useSelector } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { notifyError, notifySuccess } from "../../util/custom-functions";
+import { useNavigate } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
 
 const Withdraw = () => {
     const [methods, setMethods] = useState([]);
@@ -15,6 +18,7 @@ const Withdraw = () => {
     const [totalCharge, setTotalCharge] = useState(0);
     const [isAmountValid, setIsAmountValid] = useState(false);
     const { profile } = useSelector((state) => state.global);
+    const navigate = useNavigate()
 
     const { refetch } = useQuery("withdraw-methods", UserApi.withdrawMethods, {
         onSuccess: ({ data }) => {
@@ -23,7 +27,7 @@ const Withdraw = () => {
                 setSelectedGateway(data.data.withdraw_method[0]); // Default to the first gateway
             }
         },
-        refetchOnWindowFocus: true,
+        refetchOnWindowFocus: false,
     });
 
     useEffect(() => {
@@ -37,8 +41,6 @@ const Withdraw = () => {
     const calculateCharges = () => {
         if (!selectedGateway) return;
 
-        const minAmount = selectedGateway.min_amount;
-        const maxAmount = selectedGateway.max_amount;
         const percentCharge = parseFloat(selectedGateway.percent_charge);
         const fixedCharge = parseFloat(selectedGateway.fixed_charge);
         const totalPercentCharge = (amount / 100) * percentCharge;
@@ -53,24 +55,47 @@ const Withdraw = () => {
     };
 
     const handleAmountChange = (e) => {
-        console.log(selectedGateway)
         const value = parseFloat(e.target.value) || 0;
         setAmount(value);
     };
+
+    const handleSelectedAuthMode = (e) => {
+        withdrawForm.setFieldValue('auth_mode', e.target.value)
+    }
 
     const handleGatewayChange = (method) => {
         setSelectedGateway(method);
     };
 
+    const { mutate, isLoading } = useMutation('withdraw-apply', UserApi.withdrawApply)
+
     const withdrawForm = useFormik({
         initialValues: {
             amount: 0,
+            auth_mode: ''
         },
         validationSchema: Yup.object().shape({
             amount: Yup.number().required("Amount is required").min(0),
+            auth_mode: Yup.string().required('Auth mode is required')
         }),
         onSubmit: (values) => {
-            console.log(values);
+            mutate({
+                ...values,
+                method_code: selectedGateway.id,
+            }, {
+                onSuccess: ({ data }) => {
+                    if (data.status == 'error') {
+                        data.message.error.forEach((error) => {
+                            notifyError(error)
+                        })
+                    } else if (data.status == 'success') {
+                        data.message.success.forEach((message) => {
+                            notifySuccess(message)
+                        })
+                        navigate('/otp-verification');
+                    }
+                }
+            })
         },
     });
 
@@ -116,7 +141,7 @@ const Withdraw = () => {
                                                 />
                                             </div>
                                             <small className="text-muted">
-                                                Limit: {selectedGateway ? `${selectedGateway.min_amount} - ${selectedGateway.max_amount}` : "0.00"}
+                                                Limit: {selectedGateway ? `${selectedGateway.min_limit} - ${selectedGateway.max_limit}` : "0.00"}
                                             </small>
                                         </div>
                                     </div>
@@ -158,7 +183,13 @@ const Withdraw = () => {
                                         <div className="card-body">
                                             <div className="form-group mt-0">
                                                 <label htmlFor="verification" className="form-label">Authorization Mode</label>
-                                                <select name="auth_mode" id="verification" className="form--control select" required>
+                                                <select 
+                                                    onChange={(e) => handleSelectedAuthMode(e)}
+                                                    onBlur={withdrawForm.handleBlur}
+                                                    name="auth_mode" 
+                                                    id="verification" 
+                                                    className="form--control select" 
+                                                >
                                                     <option disabled selected value="">Select One</option>
                                                     <option value="email">Email</option>
                                                     <option value="sms">SMS</option>
@@ -166,8 +197,10 @@ const Withdraw = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" className="btn btn--base w-100 mt-3" disabled={!isAmountValid}>
-                                        Confirm Withdraw
+                                    <button type="submit" className="btn btn--base w-100 mt-3" disabled={!isAmountValid && isLoading}>
+                                        {
+                                            isLoading ? <CircularProgress size={20} color="inherit" /> : 'Confirm Withdraw'
+                                        }
                                     </button>
                                 </div>
                             </div>

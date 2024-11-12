@@ -17,9 +17,9 @@ const DepositHistory = () => {
     const { refetch } = useQuery('deposit-history', UserApi.depositHistory, {
         onSuccess: ({ data }) => {
             console.log(data)
-            // if (data.status == 'success') {
-            //     setList(data.data)
-            // }
+            if (data.status == 'success') {
+                setList(data.data)
+            }
         },
         refetchOnWindowFocus: true,
     });
@@ -48,16 +48,16 @@ const DepositHistory = () => {
                                 <th>TRX No.</th>
                                 <th>Amount</th>
                                 <th>Charge</th>
-                                <th>After Charge</th>
+                                {/* <th>After Charge</th> */}
                                 <th>Initiated At</th>
                                 <th>Method</th>
                                 <th>Status</th>
-                                <th>Details</th>
+                                {/* <th>Details</th> */}
                             </tr>
                         </thead>
                         <tbody>
                             {
-                                list.data && list.data.map((item, index) => (
+                                list.deposits?.data?.length > 0 && list.deposits.data.map((item, index) => (
                                     <tr key={index}>
                                         <td>#{item.trx}</td>
                                         <td>${Number(item.amount).toFixed(2)}</td>
@@ -67,9 +67,9 @@ const DepositHistory = () => {
                                             <span className="text-primary" title="Gateway Name">{item.gateway.name}</span>
                                         </td>
                                         <td><span className="badge badge--warning">{item.gateway.status}</span></td>
-                                        <td>
+                                        {/* <td>
                                             <Link href={`/dashboard/deposit/details/${item.trx}`} className="btn btn--sm btn-outline--base"><i className="la la-desktop"></i> Details</Link>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 ))}
                         </tbody>
@@ -77,7 +77,16 @@ const DepositHistory = () => {
                 </div>
             </div>
             <div className="card-footer">
-                {/* <Pagination /> */}
+                <Pagination 
+                    current_page={list.deposits?.current_page} 
+                    next_page_url={list.deposits?.next_page_url} 
+                    from={list.deposits?.from} to={list.deposits?.to} 
+                    total={list.deposits?.total} 
+                    last_page={list.deposits?.last_page} 
+                    last_page_url={list.deposit?.last_page_url}
+                    links={list.deposits?.links}
+                    prev_page_url={list.deposits?.prev_page_url}
+                />
             </div>
         </MasterLayout>
     )

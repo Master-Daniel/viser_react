@@ -26,6 +26,8 @@ import DepositHistory from './dashboard/deposit/history';
 import Deposit from './dashboard/deposit/deposit';
 import LoanPreview from './dashboard/loans/LoanPreview';
 import Beneficiaries from './dashboard/transfer/beneficiaries';
+import Confirm from './dashboard/deposit/confirm';
+import Otp from './dashboard/Otp';
 
 const App = () => {
   return (
@@ -50,6 +52,11 @@ const App = () => {
           <DepositHistory />
         </PrivateRoute>
       } />
+      <Route path="/dashboard/deposit/confirm" element={
+        <PrivateRoute>
+          <Confirm />
+        </PrivateRoute>
+      } />
       <Route path="/dashboard/deposit" element={
         <PrivateRoute>
           <Deposit />
@@ -58,6 +65,11 @@ const App = () => {
       <Route path="/dashboard/withdraw/history" element={
         <PrivateRoute>
           <WithdrawHistory />
+        </PrivateRoute>
+      } />
+      <Route path="/otp-verification" element={
+        <PrivateRoute>
+          <Otp />
         </PrivateRoute>
       } />
       <Route path="/dashboard/withdraw" element={

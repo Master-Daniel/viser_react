@@ -5,7 +5,9 @@ const initialState = {
     isModalVisible: false,
     pageTitle: "",
     profile: null,
-    loanPlan: {}
+    loanPlan: [],
+    depositDetails: [],
+    depositMethods: [],
 }
 
 export const globalSlice = createSlice({
@@ -26,6 +28,12 @@ export const globalSlice = createSlice({
         },
         setLoanPlan: (state, action) => {
             state.loanPlan = action.payload
+        },
+        setDepositDetails: (state, action) => {
+            state.depositDetails = action.payload
+        },
+        setDepositMethods: (state, action) => {
+            state.depositMethods = action.payload
         }
     }
 })
@@ -35,7 +43,9 @@ export const {
     setModalVisible,
     setPageTitle,
     setProfile,
-    setLoanPlan
+    setLoanPlan,
+    setDepositDetails,
+    setDepositMethods
 }  = globalSlice.actions;
 
 export default globalSlice.reducer;

@@ -44,6 +44,7 @@ const NewTicket = () => {
                 }),
         }),
         onSubmit: values => {
+            console.log(values)
             mutate(values, {
                 onSuccess: ({ data }) => {
                     if (data.status == 'error') {
@@ -70,21 +71,21 @@ const NewTicket = () => {
                                 <div className="row">
                                     <div className="form-group col-md-6">
                                         <label className="form-label">Subject</label>
-                                        <input 
+                                        <input
                                             onChange={ticketForm.handleChange}
                                             onBlur={ticketForm.handleBlur}
                                             value={ticketForm.values.subject}
-                                            type="text" 
-                                            name="subject" 
+                                            type="text"
+                                            name="subject"
                                             className={`form--control ${ticketForm.errors.subject && ticketForm.touched.subject ? 'border border-danger' : ''}`} />
                                     </div>
                                     <div className="form-group col-md-6">
                                         <label className="form-label">Priority</label>
-                                        <select 
+                                        <select
                                             onChange={ticketForm.handleChange}
                                             onBlur={ticketForm.handleBlur}
                                             value={ticketForm.values.priority}
-                                            name="priority" 
+                                            name="priority"
                                             className={`form--control ${ticketForm.errors.priority && ticketForm.touched.priority ? 'border border-danger' : ''}`}
                                         >
                                             <option value="3">High</option>
@@ -94,31 +95,36 @@ const NewTicket = () => {
                                     </div>
                                     <div className="col-12 form-group">
                                         <label className="form-label">Message</label>
-                                        <textarea 
+                                        <textarea
                                             onChange={ticketForm.handleChange}
                                             onBlur={ticketForm.handleBlur}
                                             value={ticketForm.values.message}
-                                            name="message" 
-                                            id="inputMessage" 
-                                            rows="6" 
+                                            name="message"
+                                            id="inputMessage"
+                                            rows="6"
                                             className={`form--control ${ticketForm.errors.message && ticketForm.touched.message ? 'border border-danger' : ''}`}
                                         ></textarea>
                                     </div>
                                     <div className="col-md-9">
-                                        <input 
+                                        <input
                                             onChange={ticketForm.handleChange}
                                             onBlur={ticketForm.handleBlur}
-                                            value={ticketForm.values.firstname}
+                                            value={ticketForm.values.image}
                                             type="file" id='file' name="attachment" className='d-none' />
                                         <button type="button" onClick={() => document.getElementById('file').click()} className="btn btn--dark addAttachment my-2"> <i className="fas fa-plus"></i> Add Attachment </button>
                                         <p className="mb-2"><span className="text--info">Max 5 files can be uploaded | Maximum upload size is 256MB | Allowed File Extensions: .jpg, .jpeg, .png, .pdf, .doc, .docx</span></p>
                                         <div className="row fileUploadsContainer"></div>
+                                        <p className='text-danger'>{ticketForm.errors.image}</p>
                                     </div>
                                     <div className="col-md-3">
                                         <button className="btn btn--base w-100 my-2" type="submit" disabled={isLoading}>
-                                            {
-                                                isLoading ? <CircularProgress color="inherit" size={20} /> : <i className="las la-paper-plane"></i> + 'Submit' 
-                                            }
+                                            {isLoading ? (
+                                                <CircularProgress color="inherit" size={20} />
+                                            ) : (
+                                                <>
+                                                    <i className="las la-paper-plane"></i> Submit
+                                                </>
+                                            )}
                                         </button>
                                     </div>
                                 </div>

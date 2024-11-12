@@ -16,6 +16,7 @@ const WithdrawHistory = () => {
         onSuccess: ({ data }) => {
             console.log(data)
             if (data.status == 'success') {
+                console.log(data.data.withdrawals)
                 setList(data.data.withdrawals)
             }
         },

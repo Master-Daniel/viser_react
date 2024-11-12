@@ -139,8 +139,8 @@ const FDRPlans = ({ id, title, percentage, duration, returnDays, minimum, maximu
                                             placeholder="Enter An Amount" />
                                         <span className="input-group-text"> USD </span>
                                     </div>
-                                    <p><small className="text--danger min-limit mt-2">Minimum Amount {modalData.minimum}</small></p>
-                                    <p><small className="text--danger max-limit">Maximum Amount {modalData.maximum}</small></p>
+                                    <p><small className="text--danger min-limit mt-2">Minimum Amount ${Number(modalData.minimum).toFixed(2)}</small></p>
+                                    <p><small className="text--danger max-limit">Maximum Amount ${Number(modalData.maximum).toFixed(2)}</small></p>
                                 </div>
                                 <div className="form-group mt-0">
                                     <label htmlFor="auth_mode" className="form-label">Authorization Mode</label>
