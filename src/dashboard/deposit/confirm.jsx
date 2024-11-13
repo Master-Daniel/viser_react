@@ -3,6 +3,7 @@ import { useEffect } from "react"
 import MasterLayout from "../../layout/MasterLayout"
 import { setPageTitle } from "../../lib/redux/slices/global"
 import { useDispatch, useSelector } from "react-redux"
+import { Link } from "react-router-dom"
 
 const Confirm = () => {
 
@@ -11,8 +12,6 @@ const Confirm = () => {
 
     useEffect(() => {
         dispatch(setPageTitle('Payment Confirm'))
-        console.log(depositMethods)
-        console.log(depositDetails)
     }, [])
     
     return (
@@ -32,14 +31,14 @@ const Confirm = () => {
                                     </li>
                                     <li className="list-group-item d-flex justify-content-between px-0">
                                         Amount :
-                                        <strong>{Number(depositDetails.amount).toFixed(2)}</strong>
+                                        <strong>${Number(depositDetails.amount).toFixed(2)}</strong>
                                     </li>
                                     <li className="list-group-item d-flex justify-content-between px-0">
                                         Rate :
-                                        <strong>{Number(depositDetails.rate).toFixed(2)}</strong>
+                                        <strong>${Number(depositDetails.rate).toFixed(2)}</strong>
                                     </li>
                                 </ul>
-                                {/* <button type="button" className="btn btn--base w-100 mt-3" id="btn-confirm" onClick="payWithRave()">Pay Now</button> */}
+                                <Link to="/dashboard/deposit/history" className="btn btn--danger w-100 mt-3" id="btn-confirm">Exit</Link>
                             </div>
                         </div>
                     </div>

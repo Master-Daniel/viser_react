@@ -5,6 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setModalVisible, setPageTitle } from '../../lib/redux/slices/global';
 import Tab from './Tab';
 import { useEffect } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useMutation } from 'react-query';
+import { UserApi } from '../../lib/hooks/User';
+import { CircularProgress } from '@mui/material';
 
 const WithinTransfer = () => {
 
@@ -22,6 +27,22 @@ const WithinTransfer = () => {
     useEffect(() => {
         dispatch(setPageTitle('Transfer Money Within'))
     }, [])
+
+    const { mutate, isLoading } = useMutation('transferMoneyWithin', UserApi.transferWithin)
+
+    const transferForm = useFormik({
+        initialValues: {
+            amount: 0,
+            auth_mode: ''
+        },
+        validationSchema: Yup.object().shape({
+            amount: Yup.number().min(10).required(),
+            auth_mode: Yup.string().required()
+        }),
+        onSubmit: values => {
+            console.log(values)
+        }
+    })
 
     return (
         <MasterLayout>
@@ -68,18 +89,28 @@ const WithinTransfer = () => {
                             <h5 className="modal-title">Transfer Money</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={handleClose}></button>
                         </div>
-                        <form method="post">
+                        <form onSubmit={transferForm.handleSubmit} method="post">
                             <div className="modal-body">
                                 <div className="form-group">
                                     <label className="form-label required">Amount</label>
                                     <div className="input-group custom-input-group">
-                                        <input className="form-control form--control" name="amount" type="text" />
+                                        <input 
+                                            onChange={transferForm.handleChange}
+                                            onBlur={transferForm.handleBlur}
+                                            value={transferForm.values.amount}
+                                            className={`form-control form--control ${transferForm.errors.amount && transferForm.touched.amount ? 'border border-danger' : ''}`}
+                                            name="amount" type="text" />
                                         <span className="input-group-text">USD</span>
                                     </div>
                                 </div>
                                 <div className="form-group mt-0">
                                     <label htmlFor="verification" className="form-label">Authorization Mode</label>
-                                    <select name="auth_mode" id="verification" className="form--control select" required>
+                                    <select 
+                                        onChange={transferForm.handleChange}
+                                        onBlur={transferForm.handleBlur}
+                                        name="auth_mode" 
+                                        id="verification" 
+                                        className={`select form--control ${transferForm.errors.auth_mode && transferForm.touched.auth_mode ? 'border border-danger' : ''}`}>
                                         <option disabled selected value="">Select One</option>
                                         <option value="email">Email</option>
                                         <option value="sms">SMS</option>
@@ -105,7 +136,11 @@ const WithinTransfer = () => {
                                         </li>
                                     </ul>
                                 </div>
-                                <button className="btn btn--base w-100" type="submit">Submit</button>
+                                <button className="btn btn--base w-100" type="submit" disabled={isLoading}>
+                                    {
+                                        isLoading ? <CircularProgress size={20} color="inherit" /> : 'Submit' 
+                                    }
+                                </button>
                             </div>
                         </form>
                     </div>

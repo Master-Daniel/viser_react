@@ -25,6 +25,18 @@ export const UserApi = {
         return await axiosInstance.post('/change-password', formData)
     },
     
+    storeWithDraw: async (formData) => {
+        return await axiosInstance.post(`/withdraw-request/confirm/${formData.trx}`, formData.data)
+    },
+    
+    otpVerify: async (formData) => {
+        return await axiosInstance.post(formData.url, formData.data)
+    },
+    
+    transferWithin: async (formData) => {
+        return await axiosInstance.post('/own/transfer/request/{benId}', formData)
+    },
+    
     addBeneficiary: async (formData) => {
         return await axiosInstance.post('/beneficiary/own', formData)
     },

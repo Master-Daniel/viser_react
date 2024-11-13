@@ -14,6 +14,10 @@ const Profile = () => {
     const dispatch = useDispatch()
     const { profile } = useSelector((state) => state.global)
 
+    useEffect(() => {
+        console.log(profile)
+    }, [profile])
+
     const { refetch } = useQuery('user-profile', UserApi.getUserProfile, {
         onSuccess: ({ data }) => {
             if (data.status == 'error') {
@@ -34,13 +38,13 @@ const Profile = () => {
 
     const profileForm = useFormik({
         initialValues: {
-            firstname: '',
-            lastname: '',
-            city: '',
+            firstname: profile?.firstname ?? '',
+            lastname: profile?.lastname ?? '',
+            city: profile?.address.city ?? '',
             image: '',
-            state: '',
-            address: '',
-            zip: '',
+            state: profile?.address.state ?? '',
+            address: profile?.address.address ?? '',
+            zip: profile?.address.zip ?? '',
         },
         validationSchema: Yup.object().shape({
             firstname: Yup.string().required('First name is required'),

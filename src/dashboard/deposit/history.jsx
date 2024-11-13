@@ -66,7 +66,7 @@ const DepositHistory = () => {
                                         <td>
                                             <span className="text-primary" title="Gateway Name">{item.gateway.name}</span>
                                         </td>
-                                        <td><span className="badge badge--warning">{item.gateway.status}</span></td>
+                                        <td><span className={`badge badge--${item.gateway.status == 1 ? 'success' : 'warning' }`}>{item.gateway.status == 1 ? 'Approved' : 'Pending'}</span></td>
                                         {/* <td>
                                             <Link href={`/dashboard/deposit/details/${item.trx}`} className="btn btn--sm btn-outline--base"><i className="la la-desktop"></i> Details</Link>
                                         </td> */}

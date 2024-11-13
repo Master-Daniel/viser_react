@@ -6,6 +6,7 @@ const initialState = {
     pageTitle: "",
     profile: null,
     loanPlan: [],
+    withdrawPreviewData: [],
     depositDetails: [],
     depositMethods: [],
 }
@@ -34,6 +35,9 @@ export const globalSlice = createSlice({
         },
         setDepositMethods: (state, action) => {
             state.depositMethods = action.payload
+        },
+        setWithdrawPreviewData: (state, action) => {
+            state.withdrawPreviewData = action.payload
         }
     }
 })
@@ -45,7 +49,8 @@ export const {
     setProfile,
     setLoanPlan,
     setDepositDetails,
-    setDepositMethods
+    setDepositMethods,
+    setWithdrawPreviewData
 }  = globalSlice.actions;
 
 export default globalSlice.reducer;

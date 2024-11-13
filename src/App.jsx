@@ -5,7 +5,6 @@ import PrivateRoute from './routes/PrivateRoute';
 import Welcome from './dashboard/Welcome';
 import FDRList from './dashboard/fdr/list';
 import FDRPlansPage from './dashboard/fdr/Plans';
-import LoanList from './dashboard/loans/list';
 import LoanPlansPage from './dashboard/loans/Plans';
 import DPSList from './dashboard/dps/List';
 import Airtime from './dashboard/Airtime';
@@ -28,6 +27,8 @@ import LoanPreview from './dashboard/loans/LoanPreview';
 import Beneficiaries from './dashboard/transfer/beneficiaries';
 import Confirm from './dashboard/deposit/confirm';
 import Otp from './dashboard/Otp';
+import LoanList from './dashboard/loans/List';
+import WithdrawPreview from './dashboard/withdraw/preview';
 
 const App = () => {
   return (
@@ -67,7 +68,12 @@ const App = () => {
           <WithdrawHistory />
         </PrivateRoute>
       } />
-      <Route path="/otp-verification" element={
+      <Route path="/dashboard/withdraw/preview/:trx" element={
+        <PrivateRoute>
+          <WithdrawPreview />
+        </PrivateRoute>
+      } />
+      <Route path="/otp-verification/:id/:section?/:action?" element={
         <PrivateRoute>
           <Otp />
         </PrivateRoute>

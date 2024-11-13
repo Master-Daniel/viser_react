@@ -6,6 +6,7 @@ import { setPageTitle } from "../../lib/redux/slices/global"
 import { Link } from "react-router-dom"
 import { UserApi } from "../../lib/hooks/User"
 import { useQuery } from "react-query"
+import { formatDate } from "../../util/custom-functions"
 
 const WithdrawHistory = () => {
 
@@ -16,7 +17,6 @@ const WithdrawHistory = () => {
         onSuccess: ({ data }) => {
             console.log(data)
             if (data.status == 'success') {
-                console.log(data.data.withdrawals)
                 setList(data.data.withdrawals)
             }
         },
@@ -60,24 +60,28 @@ const WithdrawHistory = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>#DCWUDPJVPKX5</td>
-                                    <td>$20.00</td>
-                                    <td>$0.00</td>
-                                    <td>$20.00</td>
-                                    <td>
-                                        <em>2023-04-17 09:25 PM </em>
-                                    </td>
-                                    <td>
-                                        <span className="text--primary" title="Method Name">Mobile Money</span>
-                                    </td>
-                                    <td>
-                                        <span className="badge badge--warning">Pending</span>
-                                    </td>
-                                    <td>
-                                        <Link to="/dashboard/withdraw/details/DCWUDPJVPKX5" className="btn btn--sm btn-outline--base"><i className="la la-desktop"></i> Details</Link>
-                                    </td>
-                                </tr>
+                                {
+                                    list.data?.length > 0 && list.data.map((item, index) => (
+                                        <tr key={index}>
+                                            <td>#{item.trx}</td>
+                                            <td>${Number(item.amount).toFixed(2)}</td>
+                                            <td>${Number(item.charge).toFixed(2)}</td>
+                                            <td>${Number(item.after_charge).toFixed(2)}</td>
+                                            <td>
+                                                <em>{formatDate(item.created_at)}</em>
+                                            </td>
+                                            <td>
+                                                <span className="text--primary" title="Method Name">{item.method.name}</span>
+                                            </td>
+                                            <td>
+                                                <span className={`badge badge--${item.status == 2 ? 'warning' : 'success'}`}>{item.status == 2 ? 'Pending' : 'Approved'}</span>
+                                            </td>
+                                            <td>
+                                                <Link to={`/dashboard/withdraw/details/${item.trx}`} className="btn btn--sm btn-outline--base"><i className="la la-desktop"></i> Details</Link>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>

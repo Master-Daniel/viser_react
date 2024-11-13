@@ -92,7 +92,7 @@ const Withdraw = () => {
                         data.message.success.forEach((message) => {
                             notifySuccess(message)
                         })
-                        navigate('/otp-verification');
+                        navigate(`/otp-verification/${data.data.otpId}/withdraw/preview`);
                     }
                 }
             })
@@ -141,7 +141,7 @@ const Withdraw = () => {
                                                 />
                                             </div>
                                             <small className="text-muted">
-                                                Limit: {selectedGateway ? `${selectedGateway.min_limit} - ${selectedGateway.max_limit}` : "0.00"}
+                                                Limit: {selectedGateway ? `$${Number(selectedGateway.min_limit).toFixed(2)} - $${Number(selectedGateway.max_limit).toFixed(2)}` : "0.00"}
                                             </small>
                                         </div>
                                     </div>

@@ -1,8 +1,21 @@
 import { useEffect, useState } from 'react';
 import MasterLayout from '../layout/MasterLayout'
+import { useNavigate, useParams } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useMutation } from 'react-query';
+import { UserApi } from '../lib/hooks/User';
+import { CircularProgress } from '@mui/material';
+import { notifyError, notifySuccess } from '../util/custom-functions';
+import axiosInstance from '../api/axiosConfig';
+import { useDispatch } from 'react-redux';
+import { setWithdrawPreviewData } from '../lib/redux/slices/global';
 
 const Otp = () => {
     const [secondsLeft, setSecondsLeft] = useState(296);
+    const { id, section, action } = useParams();
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -17,6 +30,43 @@ const Otp = () => {
 
         return () => clearInterval(timer); 
     }, []);
+
+    const { mutate, isLoading } = useMutation('otp-verify', UserApi.otpVerify)
+
+    const otpForm = useFormik({
+        initialValues: {
+            otp: ''
+        },
+        validationSchema: Yup.object().shape({
+            otp: Yup.string().required()
+        }),
+        onSubmit: values => {
+            mutate({
+                url: `/check/otp/${id}`,
+                data: {...values}
+            }, {
+                onSuccess: async ({ data }) => {
+                    if (data.status == 'error') {
+                        data.message.error.forEach((error) => {
+                            notifyError(error)
+                        })
+                    } else {
+                        const trx = data.data.trx
+                        data.message.success.forEach((message) => {
+                            notifySuccess(message)
+                        })
+                        if (section && action) {
+                            const { data } = await axiosInstance.get(`/${section}/${action}/${trx}`)
+                            dispatch(setWithdrawPreviewData(data.data))
+                            navigate(`/dashboard/${section}/${action}/${trx}`)
+                            return;
+                        }
+                        navigate(-1)
+                    }
+                }
+            })
+        }
+    })
 
     return (
         <MasterLayout>
@@ -45,10 +95,10 @@ const Otp = () => {
                                     </div>
                                 </div>
 
-                                <form method="post" className="submit-form">
+                                <form method="post" onSubmit={otpForm.handleSubmit} className="submit-form">
                                     <div className="verification-code">
-                                        <input type="text" name="otp" id="verification-code" className="form--control overflow-hidden" autoComplete="off" />
-                                        <div className="boxes">
+                                        <input type="text" onChange={otpForm.handleChange} onBlur={otpForm.handleBlur} name="otp" id="verification-code" className="form--control overflow-hidden" autoComplete="off" />
+                                        <div className={`boxes ${otpForm.errors.otp && otpForm.touched.otp ? 'border border-danger' : ''}`}>
                                             <span>-</span>
                                             <span>-</span>
                                             <span>-</span>
@@ -58,7 +108,11 @@ const Otp = () => {
                                         </div>
                                     </div>
                                     <div className="form-group mt-2">
-                                        <button type="submit" className="btn btn-md btn--base w-100">Verify</button>
+                                        <button type="submit" className="btn btn-md btn--base w-100">
+                                            {
+                                                isLoading ? <CircularProgress size={20} color="inherit" /> : 'Verify'
+                                            }
+                                        </button>
                                     </div>
                                 </form>
                             </div>
