@@ -73,7 +73,7 @@ const TransfersList = () => {
                                                 <em>{formatDate(item.created_at)}</em>
                                             </td>
                                             <td>
-                                                4654654651544
+                                                {item.account_number}
                                             </td>
                                             <td>
                                                 <span className="text--warning fw-bold">Wire Transfer</span>
@@ -84,7 +84,7 @@ const TransfersList = () => {
                                             <td>${Number(item.charge).toFixed(2)}</td>
                                             <td>$51.00</td>
                                             <td>
-                                                <span className="badge badge--warning">{item.status}</span>
+                                                <span className={`badge badge--${item.status == 0 ? 'warning' : 'Approved'}`}>{item.status == 0 ? 'Pending' : 'Approved'}</span>
                                             </td>
                                         </tr>
                                     ))

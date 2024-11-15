@@ -33,7 +33,7 @@ const Navigation = () => {
             <div className="sidebar-menu__inner">
                 <span className="sidebar-menu__close d-lg-none d-block flex-between"><i className="fas fa-times"></i></span>
                 <div className="sidebar-logo">
-                    <Link to="/dashboard" className="sidebar-logo__link"><img src="" alt="" /></Link>
+                    <Link to="/dashboard" className="sidebar-logo__link"><img src="/assets/images/blue-logo.png" alt="" /></Link>
                 </div>
                 <ul className="sidebar-menu-list">
                     <li className="menu-title pt-0">MENU</li>

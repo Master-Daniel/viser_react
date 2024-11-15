@@ -20,9 +20,6 @@ const NewTicket = () => {
 
     const { mutate, isLoading } = useMutation('create-ticket', UserApi.createTicket)
 
-    const FILE_SIZE = 2 * 1024 * 1024;
-    const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
-
     const ticketForm = useFormik({
         initialValues: {
             subject: '',
@@ -35,13 +32,6 @@ const NewTicket = () => {
             subject: Yup.string().required(),
             priority: Yup.string().required(),
             message: Yup.string().required(),
-            image: Yup.mixed()
-                .test('fileSize', 'File size is too large', (value) => {
-                    return value && value.size <= FILE_SIZE;
-                })
-                .test('fileType', 'Unsupported file format', (value) => {
-                    return value && SUPPORTED_FORMATS.includes(value.type);
-                }),
         }),
         onSubmit: values => {
             console.log(values)

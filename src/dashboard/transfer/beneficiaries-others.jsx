@@ -6,14 +6,16 @@ import Tab from './Tab';
 import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { UserApi } from '../../lib/hooks/User';
 import { notifyError, notifySuccess } from '../../util/custom-functions';
 import { CircularProgress } from '@mui/material';
 
-const Beneficiaries = () => {
+const BeneficiariesOthers = () => {
 
     const [isModalVisible, setModal] = useState(false)
+    const [beneficiaries, setBeneficiaries] = useState([])
+    const [banks, setBanks] = useState([])
     const dispatch = useDispatch()
 
     const handleClick = () => {
@@ -24,17 +26,27 @@ const Beneficiaries = () => {
         setModal(false);
     };
 
+    const { refetch } = useQuery('get-other-beneficiaries', UserApi.getOtherBeneficiaries, {
+        onSuccess: ({ data }) => {
+            console.log(data)
+            setBanks(data.data.banks)
+            setBeneficiaries(data.data)
+        }
+    })
+
     useEffect(() => {
-        dispatch(setPageTitle('Transfer Money Within'))
+        refetch()
+        dispatch(setPageTitle('Manage Other Beneficiaries'))
     }, [])
 
-    const { mutate, isLoading } = useMutation('add-beneficiary', UserApi.addBeneficiary)
+    const { mutate, isLoading } = useMutation('add-other-beneficiary', UserApi.addOtherBeneficiary)
 
     const benefitForm = useFormik({
         initialValues: {
             account_name: "",
             account_number: "",
-            short_name: ""
+            short_name: "",
+            bank: ''
         },
         validationSchema: Yup.object().shape({
             account_name: Yup.string().required('Account name is required'),
@@ -60,6 +72,10 @@ const Beneficiaries = () => {
         }
     })
 
+    useEffect(() => {
+        console.log(beneficiaries)
+    }, [beneficiaries])
+
     return (
         <MasterLayout>
             <Tab />
@@ -75,33 +91,37 @@ const Beneficiaries = () => {
                     <form method="POST" onSubmit={benefitForm.handleSubmit}>
                         <div className="form-group">
                             <label className="form-label">Select Bank</label>
-                            <select className="form--control" name="bank" required>
-                                <option value="" disabled selected>Select One</option>
-                                <option value="1">SCA Bank</option>
-                                <option value="2">BNR Bank</option>
-                                <option value="3">JB Bank</option>
-                                <option value="4">FCII Bank</option>
+                            <select
+                                onChange={benefitForm.handleChange}
+                                onBlur={benefitForm.handleBlur}
+                                className="form--control" name="bank" required>
+                                <option value="">Select One</option>
+                                {
+                                    banks.map((bank, index) => (
+                                        <option key={index} value={bank.id}>{bank.name}</option>
+                                    ))
+                                }
                             </select>
                         </div>
 
                         <div className="form-group">
                             <label className="form-label">Short Name</label>
-                            <input 
+                            <input
                                 onChange={benefitForm.handleChange}
                                 onBlur={benefitForm.handleBlur}
                                 value={benefitForm.values.short_name}
                                 className={`form--control ${benefitForm.errors.short_name && benefitForm.touched.short_name ? 'border border-danger' : ''}`}
-                                name="short_name" 
+                                name="short_name"
                                 type="text" />
                         </div>
                         <div className="form-group">
                             <label className="form-label">Account Name:</label>
-                            <input 
+                            <input
                                 onChange={benefitForm.handleChange}
                                 onBlur={benefitForm.handleBlur}
                                 value={benefitForm.values.account_name}
                                 className={`form--control ${benefitForm.errors.account_name && benefitForm.touched.account_name ? 'border border-danger' : ''}`}
-                                name="account_name" 
+                                name="account_name"
                                 type="text" />
                         </div>
                         <div className="form-group">
@@ -141,18 +161,22 @@ const Beneficiaries = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>BNR Bank</td>
-                                    <td>My Account Number</td>
-                                    <td>My Account Name</td>
-                                    <td>My Short Name</td>
-                                    <td>
-                                        <div className="button-group">
-                                            <button className="btn btn--sm btn--primary seeDetails" data-id="2"><i className="la la-desktop"></i></button>
-                                            <button className="btn btn--sm btn--base EditBeneficiary" data-resources="{&quot;id&quot;:2,&quot;user_id&quot;:1,&quot;beneficiary_type&quot;:&quot;App\\Models\\OtherBank&quot;,&quot;beneficiary_id&quot;:2,&quot;account_number&quot;:&quot;My Account Number&quot;,&quot;account_name&quot;:&quot;My Account Name&quot;,&quot;short_name&quot;:&quot;My Short Name&quot;,&quot;details&quot;:[{&quot;name&quot;:&quot;Account Name&quot;,&quot;type&quot;:&quot;text&quot;,&quot;value&quot;:&quot;My Account Name&quot;},{&quot;name&quot;:&quot;Account Number&quot;,&quot;type&quot;:&quot;text&quot;,&quot;value&quot;:&quot;My Account Number&quot;}],&quot;created_at&quot;:&quot;2021-07-28T15:55:11.000000Z&quot;,&quot;updated_at&quot;:&quot;2024-01-29T21:53:45.000000Z&quot;,&quot;beneficiary_of&quot;:{&quot;id&quot;:2,&quot;name&quot;:&quot;BNR Bank&quot;,&quot;minimum_limit&quot;:&quot;1.00000000&quot;,&quot;maximum_limit&quot;:&quot;2000.00000000&quot;,&quot;daily_maximum_limit&quot;:&quot;20000.00000000&quot;,&quot;monthly_maximum_limit&quot;:&quot;200000.00000000&quot;,&quot;daily_total_transaction&quot;:15,&quot;monthly_total_transaction&quot;:200,&quot;fixed_charge&quot;:&quot;0.00000000&quot;,&quot;percent_charge&quot;:&quot;2.00&quot;,&quot;processing_time&quot;:&quot;30 Minutes&quot;,&quot;instruction&quot;:&quot;&lt;div style=\&quot;text-align: center;\&quot;&gt;&lt;b style=\&quot;font-size: 1rem;\&quot;&gt;Please Provide The Infomation Bellow&lt;\/b&gt;&lt;\/div&gt;&quot;,&quot;status&quot;:1,&quot;form_id&quot;:12,&quot;created_at&quot;:&quot;2022-12-04T13:11:32.000000Z&quot;,&quot;updated_at&quot;:&quot;2022-12-04T13:11:32.000000Z&quot;}}"><i className="la la-pen"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {
+                                    beneficiaries?.beneficiaries?.data.length > 0 && beneficiaries.beneficiaries.data.map((benefit, index) => (
+                                        <tr key={index}>
+                                            <td>{benefit.bank_name}</td>
+                                            <td>{benefit.account_number}</td>
+                                            <td>{benefit.account_name}</td>
+                                            <td>{benefit.short_name}</td>
+                                            <td>
+                                                <div className="button-group">
+                                                    <button className="btn btn--sm btn--primary seeDetails" data-id={benefit.id}><i className="la la-desktop"></i></button>
+                                                    <button className="btn btn--sm btn--base EditBeneficiary"><i className="la la-pen"></i></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -162,4 +186,4 @@ const Beneficiaries = () => {
     )
 }
 
-export default Beneficiaries
+export default BeneficiariesOthers

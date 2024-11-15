@@ -5,10 +5,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { setModalVisible, setPageTitle } from "../../lib/redux/slices/global"
 import { useEffect, useState } from "react"
 import Tab from "./Tab"
+import { useQuery } from "react-query"
+import { UserApi } from "../../lib/hooks/User"
 
 const Others = () => {
 
     const { isModalVisible } = useSelector((state) => state.global)
+    const [beneficiaries, setBeneficiaries] = useState([])
     const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false);
     const [isTransferModalVisible, setIsTransferModalVisible] = useState(false);
     const dispatch = useDispatch()
@@ -29,9 +32,20 @@ const Others = () => {
         setIsTransferModalVisible(false)
     };
 
+    const { refetch } = useQuery('get-other-beneficiaries', UserApi.getOtherBeneficiaries, {
+        onSuccess: ({ data }) => {
+            setBeneficiaries(data.data)
+        }
+    })
+
     useEffect(() => {
+        refetch()
         dispatch(setPageTitle('Transfer Money to Other Bank'))
     }, [])
+
+    useEffect(() => {
+        console.log(beneficiaries)
+    }, [beneficiaries])
 
     return (
         <MasterLayout>
@@ -39,7 +53,7 @@ const Others = () => {
             <div className="card custom--card overflow-hidden">
                 <div className="card-header">
                     <div className="header-nav mb-0">
-                        <Link className="btn btn-sm btn--dark" to="/dashboard/transfer/beneficiaries"> <i className="la la-users"></i> Manage Beneficiaries</Link>
+                        <Link className="btn btn-sm btn--dark" to="/dashboard/transfer/beneficiaries/others"> <i className="la la-users"></i> Manage Beneficiaries</Link>
                     </div>
                 </div>
 
@@ -56,20 +70,24 @@ const Others = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>My Short Name</td>
-                                    <td>My Account Name</td>
-                                    <td>My Account Number</td>
-                                    <td>BNR Bank</td>
-                                    <td>
-                                        <div className="d-flex gap-2 justify-content-end">
-                                            <button className="btn btn--sm btn-outline--base seeDetails" data-id="2" onClick={handleDetailsClick}><i className="la la-desktop"></i> Details</button>
-                                            <button className="btn btn--sm btn-outline--success sendBtn" onClick={handleClick} data-name="My Short Name" data-processing_time="30 Minutes" data-transfer_charge="2%" data-bank_name="BNR Bank" data-id="2" data-minimum_amount="$1.00" data-maximum_amount="$2,000.00" data-daily_limit="$20,000.00" data-monthly_limit="$200,000.00" data-daily_count="15" data-monthly_count="200" type="button">
-                                                <i className="las la-hand-holding-usd"></i> Transfer
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {
+                                    beneficiaries.data?.beneficiaries?.data?.length > 0 && beneficiaries.data?.beneficiaries?.data.map((benefit, index) => (
+                                        <tr key={index}>
+                                            <td>{benefit.name}</td>
+                                            <td>{benefit.account_name}</td>
+                                            <td>{benefit.account_number} </td>
+                                            <td>{benefit.bank} </td>
+                                            <td>
+                                                <div className="d-flex gap-2 justify-content-end">
+                                                    <button className="btn btn--sm btn-outline--base seeDetails" data-id={benefit.id} onClick={handleDetailsClick}><i className="la la-desktop"></i> Details</button>
+                                                    <button className="btn btn--sm btn-outline--success sendBtn" onClick={handleClick} type="button">
+                                                        <i className="las la-hand-holding-usd"></i> Transfer
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>

@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import DashboardCard from '../components/DashboardCard'
 import MasterLayout from '../layout/MasterLayout'
-import { notifyError, notifySuccess } from '../util/custom-functions';
+import { formatDate, notifyError, notifySuccess } from '../util/custom-functions';
 import { useEffect, useState } from 'react';
 import { setPageTitle, setProfile } from '../lib/redux/slices/global';
 import { useQuery } from 'react-query';
@@ -13,6 +13,7 @@ const Welcome = () => {
 
     const dispatch = useDispatch()
     const [referralLink, setReferralLink] = useState('')
+    const [dashboardData, setDahsboardData] = useState([])
     const { profile } = useSelector((state) => state.global)
 
     const { refetch } = useQuery('user-profile', UserApi.getUserProfile, {
@@ -21,10 +22,16 @@ const Welcome = () => {
         },
         refetchOnWindowFocus: true,
     });
-    
+
+    const { refetch: dashboard } = useQuery('dashboard', UserApi.getDashboardData, {
+        onSuccess: ({ data }) => {
+            setDahsboardData(data)
+        },
+        refetchOnWindowFocus: true,
+    });
+
     const { refetch: refetchReferralLink } = useQuery('referral-link', UserApi.getUserReferralLink, {
         onSuccess: ({ data }) => {
-            console.log(data)
             setReferralLink(data.data.referral_link);
         },
         refetchOnWindowFocus: true,
@@ -32,6 +39,7 @@ const Welcome = () => {
 
     useEffect(() => {
         dispatch(setPageTitle('Dashboard'))
+        dashboard()
         refetch()
         refetchReferralLink()
     }, [])
@@ -72,45 +80,45 @@ const Welcome = () => {
                     </div>
                 </div>
 
-                {/* <DashboardCard
-                    title="Pending Deposits"
+                <DashboardCard
+                    title="Total Deposits"
                     icon="wallet"
-                    amount="0"
+                    amount={dashboardData?.data?.dashboard_data?.total_deposit}
                 />
 
                 <DashboardCard
-                    title="Pending Withdrawals"
+                    title="Total Withdrawals"
                     icon="money-check"
-                    amount="0"
+                    amount={dashboardData?.data?.dashboard_data?.total_withdraw}
                 />
 
                 <DashboardCard
                     title="Today Transactions"
                     icon="exchange-alt"
-                    amount="0"
+                    amount={dashboardData?.data?.dashboard_data?.total_trx}
                 />
 
                 <DashboardCard
                     title="Running FDR"
                     icon="money-bill"
-                    amount="0"
+                    amount={dashboardData?.data?.dashboard_data?.total_fdr}
                 />
 
                 <DashboardCard
                     title="Running DPS"
                     icon="box-open"
-                    amount="0"
+                    amount={dashboardData?.data?.dashboard_data?.total_dps}
                 />
 
                 <DashboardCard
                     title="Running Loan"
                     icon="hand-holding-usd"
-                    amount="0"
-                /> */}
+                    amount={dashboardData?.data?.dashboard_data?.total_loan}
+                />
 
                 <div className="pt-60">
                     <div className="row gy-4 justify-content-center">
-                        {/* <div className="col-xxl-6">
+                        <div className="col-xxl-6">
                             <div className="dashboard-table">
                                 <h5 className="dashboard-table__title card-header__title text-dark">
                                     Latest Credits
@@ -125,17 +133,17 @@ const Welcome = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>C69F8RX238KR</td>
-                                            <td>08 Aug, 2024 12:08 PM</td>
-                                            <td>$200.00</td>
-                                            <td className="fw-bold">
-                                        {{ showAmount($credit->amount) }} {{ __($general->cur_text) }}
-                                    </td>
-                                        </tr>
-                                        <tr>
-                                    <td colspan="100%" className="text-center">{{ __($emptyMessage) }}</td>
-                                </tr>
+                                        {
+                                            dashboardData?.latest_credits?.data?.length > 0 && dashboardData?.latest_credits?.data.map((credit, index) => (
+                                                <tr key={index}>
+                                                    <td>{credit.id}</td>
+                                                    <td>{formatDate(credit.created_at)}</td>
+                                                    <td>{credit.trx}</td>
+                                                    <td>${Number(credit.amount).toFixed(2)}</td>
+                                                    <td className="fw-bold"></td>
+                                                </tr>
+                                            ))
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -155,21 +163,20 @@ const Welcome = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>C69F8RX238KR</td>
-                                            <td>08 Aug, 2024 12:08 PM</td>
-                                            <td>$200.00</td>
-                                            <td className="fw-bold">
-                                        {{ showAmount($credit->amount) }} {{ __($general->cur_text) }}
-                                    </td>
-                                        </tr>
-                                        <tr>
-                                    <td colspan="100%" className="text-center">{{ __($emptyMessage) }}</td>
-                                </tr>
+                                        {
+                                            dashboardData?.latest_debits?.data?.length > 0 && dashboardData?.latest_credits?.data.map((debits, index) => (
+                                                <tr key={index}>
+                                                    <td>{debits.id}</td>
+                                                    <td>{formatDate(debits.created_at)}</td>
+                                                    <td>{debits.trx}</td>
+                                                    <td>${Number(debits.amount).toFixed(2)}</td>
+                                                </tr>
+                                            ))
+                                        }
                                     </tbody>
                                 </table>
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                 </div>
             </div>

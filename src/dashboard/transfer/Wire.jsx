@@ -10,12 +10,14 @@ import { useFormik } from "formik"
 import * as Yup from 'yup';
 import { notifyError, notifySuccess } from "../../util/custom-functions"
 import { CircularProgress } from "@mui/material"
+import { useNavigate } from "react-router-dom"
 
 const WireTransfer = () => {
 
     const dispatch = useDispatch()
     const [wireData, setWireData] = useState([])
     const { profile } = useSelector((state) => state.global)
+    const navigate = useNavigate()
 
     const { refetch } = useQuery('fetch-wire-form', UserApi.fetchWireTransferData, {
         onSuccess: ({ data }) => {
@@ -40,16 +42,10 @@ const WireTransfer = () => {
             bank_name: '',
             auth_mode: '',
         },
-        validationSchema: Yup.object().shape({
-            amount: Yup.number().required('Amount is required'),
-            account_name: Yup.string().required('Account name is required'),
-            account_number: Yup.string().required('Account number is required'),
-            bank_name: Yup.string().required('Bank name is required'),
-            auth_mode: Yup.string().required('Auth mode is required'),
-        }),
         onSubmit: values => {
             mutate(values, {
                 onSuccess: ({ data }) => {
+                    console.log(data)
                     if (data.status == 'error') {
                         data.message.error.forEach((error) => {
                             notifyError(error)
@@ -59,6 +55,7 @@ const WireTransfer = () => {
                             notifySuccess(message)
                             wireForm.resetForm()
                         })
+                        navigate(`/otp-verification/${data.data.otpId}/wire-transfer/confirm`)
                     }
                 }
             })
@@ -76,19 +73,19 @@ const WireTransfer = () => {
                             <ul>
                                 <li className="pricing-card__list flex-between">
                                     <span>Minimum Per Transaction</span>
-                                    <span className="fw-bold">${wireData.minimum_limit}</span>
+                                    <span className="fw-bold">${Number(wireData.minimum_limit).toFixed(2)}</span>
                                 </li>
                                 <li className="pricing-card__list flex-between">
                                     <span>Maximum Per Transaction</span>
-                                    <span className="fw-bold">${wireData.maximum_limit}</span>
+                                    <span className="fw-bold">${Number(wireData.maximum_limit).toFixed(2)}</span>
                                 </li>
                                 <li className="pricing-card__list flex-between">
                                     <span>Daily Maximum</span>
-                                    <span className="fw-bold">${wireData.daily_maximum_limit}</span>
+                                    <span className="fw-bold">${Number(wireData.daily_maximum_limit).toFixed(2)}</span>
                                 </li>
                                 <li className="pricing-card__list flex-between">
                                     <span>Monthly Maximum</span>
-                                    <span className="fw-bold">${wireData.monthly_maximum_limit}</span>
+                                    <span className="fw-bold">${Number(wireData.monthly_maximum_limit).toFixed(2)}</span>
                                 </li>
                                 <li className="pricing-card__list flex-between">
                                     <span>Daily Maximum Transaction</span>
@@ -131,7 +128,7 @@ const WireTransfer = () => {
                                             name="amount" />
                                         <span className="input-group-text">USD</span>
                                     </div>
-                                    <span className="fw-bold  text--info ">Current Balance: ${profile.balance}</span>
+                                    <span className="fw-bold  text--info ">Current Balance: {profile.balance}</span>
                                 </div>
                                 <div className="row">
                                     <div className="col-md-12">
@@ -156,6 +153,18 @@ const WireTransfer = () => {
                                                 value={wireForm.values.account_number}
                                                 className={`form--control form-control ${wireForm.errors.account_number && wireForm.touched.account_number ? 'border border-danger' : ''}`}
                                                 name="account_number" />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-12">
+                                        <div className="form-group">
+                                            <label className="form-label form--label">Bank Name</label>
+                                            <input
+                                                type="text"
+                                                onChange={wireForm.handleChange}
+                                                onBlur={wireForm.handleBlur}
+                                                value={wireForm.values.bank}
+                                                className={`form--control form-control ${wireForm.errors.bank && wireForm.touched.bank ? 'border border-danger' : ''}`}
+                                                name="bank" />
                                         </div>
                                     </div>
                                 </div>

@@ -4,19 +4,23 @@ import MasterLayout from '../../layout/MasterLayout'
 import { useDispatch, useSelector } from 'react-redux';
 import { setModalVisible, setPageTitle } from '../../lib/redux/slices/global';
 import Tab from './Tab';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { UserApi } from '../../lib/hooks/User';
 import { CircularProgress } from '@mui/material';
+import { notifyError, notifySuccess } from '../../util/custom-functions';
 
 const WithinTransfer = () => {
 
     const { isModalVisible } = useSelector((state) => state.global)
+    const [beneficiaries, setBeneficiaries] = useState([])
+    const [accountNumber, setAccountNumber] = useState('')
     const dispatch = useDispatch()
 
-    const handleClick = () => {
+    const handleClick = (accountNumber) => {
+        setAccountNumber(accountNumber)
         dispatch(setModalVisible(true));
     };
 
@@ -24,7 +28,14 @@ const WithinTransfer = () => {
         dispatch(setModalVisible(false));
     };
 
+    const { refetch } = useQuery('get-own-beneficiaries', UserApi.getOwnBeneficiaries, {
+        onSuccess: ({ data }) => {
+            setBeneficiaries(data.data)
+        }
+    })
+
     useEffect(() => {
+        refetch()
         dispatch(setPageTitle('Transfer Money Within'))
     }, [])
 
@@ -40,7 +51,23 @@ const WithinTransfer = () => {
             auth_mode: Yup.string().required()
         }),
         onSubmit: values => {
-            console.log(values)
+            mutate({
+                id: accountNumber,
+                data: values
+            }, {
+                onSuccess: ({ data }) => {
+                    if (data.status == 'error') {
+                        data.message.error.forEach((error) => {
+                            notifyError(error)
+                        })
+                    } else {
+                        data.message.success.forEach((message) => {
+                            notifySuccess(message)
+                        })
+                        handleClose()
+                    }
+                }
+            })
         }
     })
 
@@ -51,7 +78,7 @@ const WithinTransfer = () => {
                 <div className="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
                     <h6 className="card-title mb-0">Beneficiaries</h6>
                     <div className="header-nav mb-0">
-                        <Link className="btn btn-sm btn--dark" to="/dashboard/transfer/beneficiaries"> <i className="la la-users"></i> Manage Beneficiaries</Link>
+                        <Link className="btn btn-sm btn--dark" to="/dashboard/transfer/beneficiaries/within"> <i className="la la-users"></i> Manage Beneficiaries</Link>
                     </div>
                 </div>
                 <div className="card-body p-0">
@@ -66,16 +93,20 @@ const WithinTransfer = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Jane</td>
-                                    <td>VB21212846204262 </td>
-                                    <td>testuser</td>
-                                    <td>
-                                        <button className="btn btn--sm btn-outline--base sendBtn" onClick={handleClick} data-id="1">
-                                            <i className="las la-hand-holding-usd"></i> Transfer Money
-                                        </button>
-                                    </td>
-                                </tr>
+                                {
+                                    beneficiaries.data?.beneficiaries?.data?.length > 0 && beneficiaries.data?.beneficiaries?.data.map((benefit, index) => (
+                                        <tr key={index}>
+                                            <td>{benefit.name}</td>
+                                            <td>{benefit.account_number} </td>
+                                            <td>{benefit.account_name}</td>
+                                            <td>
+                                                <button className="btn btn--sm btn-outline--base sendBtn" onClick={() => handleClick(benefit.account_number)} data-id="1">
+                                                    <i className="las la-hand-holding-usd"></i> Transfer Money
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -94,7 +125,7 @@ const WithinTransfer = () => {
                                 <div className="form-group">
                                     <label className="form-label required">Amount</label>
                                     <div className="input-group custom-input-group">
-                                        <input 
+                                        <input
                                             onChange={transferForm.handleChange}
                                             onBlur={transferForm.handleBlur}
                                             value={transferForm.values.amount}
@@ -105,11 +136,11 @@ const WithinTransfer = () => {
                                 </div>
                                 <div className="form-group mt-0">
                                     <label htmlFor="verification" className="form-label">Authorization Mode</label>
-                                    <select 
+                                    <select
                                         onChange={transferForm.handleChange}
                                         onBlur={transferForm.handleBlur}
-                                        name="auth_mode" 
-                                        id="verification" 
+                                        name="auth_mode"
+                                        id="verification"
                                         className={`select form--control ${transferForm.errors.auth_mode && transferForm.touched.auth_mode ? 'border border-danger' : ''}`}>
                                         <option disabled selected value="">Select One</option>
                                         <option value="email">Email</option>
@@ -138,7 +169,7 @@ const WithinTransfer = () => {
                                 </div>
                                 <button className="btn btn--base w-100" type="submit" disabled={isLoading}>
                                     {
-                                        isLoading ? <CircularProgress size={20} color="inherit" /> : 'Submit' 
+                                        isLoading ? <CircularProgress size={20} color="inherit" /> : 'Submit'
                                     }
                                 </button>
                             </div>

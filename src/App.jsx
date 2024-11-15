@@ -24,11 +24,14 @@ import Register from './Register';
 import DepositHistory from './dashboard/deposit/history';
 import Deposit from './dashboard/deposit/deposit';
 import LoanPreview from './dashboard/loans/LoanPreview';
-import Beneficiaries from './dashboard/transfer/beneficiaries';
+import BeneficiariesWithin from './dashboard/transfer/beneficiaries-within';
 import Confirm from './dashboard/deposit/confirm';
 import Otp from './dashboard/Otp';
 import LoanList from './dashboard/loans/List';
 import WithdrawPreview from './dashboard/withdraw/preview';
+import ConfirmWireTransfer from './dashboard/transfer/confirmWireTransfer';
+import BeneficiariesOthers from './dashboard/transfer/beneficiaries-others';
+import ViewTicket from './dashboard/support/viewTicket';
 
 const App = () => {
   return (
@@ -133,14 +136,24 @@ const App = () => {
           <Others />
         </PrivateRoute>
       } />
+      <Route path="/dashboard/wire-transfer/confirm/:trx" element={
+        <PrivateRoute>
+          <ConfirmWireTransfer />
+        </PrivateRoute>
+      } />
       <Route path="/dashboard/transfer/wire" element={
         <PrivateRoute>
           <WireTransfer />
         </PrivateRoute>
       } />
-      <Route path="/dashboard/transfer/beneficiaries" element={
+      <Route path="/dashboard/transfer/beneficiaries/within" element={
         <PrivateRoute>
-          <Beneficiaries />
+          <BeneficiariesWithin />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/transfer/beneficiaries/others" element={
+        <PrivateRoute>
+          <BeneficiariesOthers />
         </PrivateRoute>
       } />
       <Route path="/dashboard/transactions" element={
@@ -151,6 +164,11 @@ const App = () => {
       <Route path="/dashboard/support/list" element={
         <PrivateRoute>
           <SupportTicket />
+        </PrivateRoute>
+      } />
+      <Route path="/dashboard/support/ticket/view/:id" element={
+        <PrivateRoute>
+          <ViewTicket />
         </PrivateRoute>
       } />
       <Route path="/dashboard/support/ticket/new" element={

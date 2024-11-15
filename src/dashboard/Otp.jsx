@@ -51,7 +51,8 @@ const Otp = () => {
                             notifyError(error)
                         })
                     } else {
-                        const trx = data.data.trx
+                        const trx = data?.data?.trx
+                        
                         data.message.success.forEach((message) => {
                             notifySuccess(message)
                         })

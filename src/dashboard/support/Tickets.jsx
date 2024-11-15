@@ -26,6 +26,10 @@ const SupportTicket = () => {
         dispatch(setPageTitle('Support Tickets'))
     }, [])
 
+    useEffect(() => {
+        console.log(tickets)
+    }, [tickets])
+
     return (
         <MasterLayout>
             <div className="card custom--card overflow-hidden">
@@ -46,13 +50,13 @@ const SupportTicket = () => {
                                 {
                                     tickets.data?.length > 0 && tickets.data.map((ticket, index) => (
                                         <tr key={index}>
-                                            <td>#</td>
+                                            <td>#{ticket.ticket}</td>
                                             <td>{ticket.subject}</td>
-                                            <td><span className="badge badge--dark">{ticket.status}</span></td>
-                                            <td><span className="badge badge--danger">{ticket.priority}</span></td>
+                                            <td><span className={`badge badge--${ticket.status == 0 ? 'dark' : 'info'}`}>{ticket.status == 0 ? 'Open' : 'Closed'}</span></td>
+                                            <td><span className={`badge badge--${ticket.priority == 3 ? 'danger' : ticket.priority == 2 ? 'warning' : 'info'}`}>{ticket.priority == 3 ? 'High' : ticket.priority == 2 ? 'Medium' : 'Low'}</span></td>
                                             <td>{formatDate(ticket.last_reply)}</td>
                                             <td>
-                                                <Link className="btn btn-outline--base btn--sm" to={`/dashboard/support/ticket/view/${ticket.id}`}>
+                                                <Link className="btn btn-outline--base btn--sm" to={`/dashboard/support/ticket/view/${ticket.ticket}`}>
                                                     <i className="la la-desktop"></i> View
                                                 </Link>
                                             </td>

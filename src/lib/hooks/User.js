@@ -4,9 +4,21 @@ export const UserApi = {
     getUserProfile: async () => {
         return await axiosInstance.get('/user-info')
     },
+    
+    getDashboardData: async () => {
+        return await axiosInstance.get('/dashboard')
+    },
 
     getUserReferralLink: async () => {
         return await axiosInstance.get('/referral-link')
+    },
+    
+    getOwnBeneficiaries: async () => {
+        return await axiosInstance.get('/beneficiary/own')
+    },
+    
+    getOtherBeneficiaries: async () => {
+        return await axiosInstance.get('/beneficiary/other')
     },
 
     profileSetting: async (formData) => {
@@ -17,6 +29,12 @@ export const UserApi = {
     
     createTicket: async (formData) => {
         return await axiosInstance.post('/ticket/create', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+    },
+    
+    replyTicket: async (formData) => {
+        return await axiosInstance.post(`/ticket/reply/${formData.id}`, formData.data, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
     },
@@ -34,11 +52,15 @@ export const UserApi = {
     },
     
     transferWithin: async (formData) => {
-        return await axiosInstance.post('/own/transfer/request/{benId}', formData)
+        return await axiosInstance.post(`/own/transfer/request/${formData.id}`, formData.data)
     },
     
     addBeneficiary: async (formData) => {
         return await axiosInstance.post('/beneficiary/own', formData)
+    },
+    
+    addOtherBeneficiary: async (formData) => {
+        return await axiosInstance.post('/beneficiary/other', formData)
     },
     
     depositInsert: async (formData) => {
@@ -55,6 +77,10 @@ export const UserApi = {
     
     loanConfirm: async (form) => {
         return await axiosInstance.post(form.url, form.data)
+    },
+    
+    closeTicket: async (form) => {
+        return await axiosInstance.post(form.url)
     },
     
     fdrApply: async (form) => {
@@ -111,6 +137,10 @@ export const UserApi = {
     
     supportTickets: async () => {
         return await axiosInstance.get(`/ticket`)
+    },
+    
+    viewSupportTicket: async (id) => {
+        return await axiosInstance.get(`/ticket/view/${id}`)
     },
     
     withdrawHistory: async () => {
