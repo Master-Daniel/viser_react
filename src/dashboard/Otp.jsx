@@ -13,7 +13,7 @@ import { setWithdrawPreviewData } from '../lib/redux/slices/global';
 
 const Otp = () => {
     const [secondsLeft, setSecondsLeft] = useState(296);
-    const { id, section, action } = useParams();
+    const { id, section, action, optional } = useParams();
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -28,7 +28,7 @@ const Otp = () => {
             });
         }, 1000);
 
-        return () => clearInterval(timer); 
+        return () => clearInterval(timer);
     }, []);
 
     const { mutate, isLoading } = useMutation('otp-verify', UserApi.otpVerify)
@@ -43,7 +43,7 @@ const Otp = () => {
         onSubmit: values => {
             mutate({
                 url: `/check/otp/${id}`,
-                data: {...values}
+                data: { ...values }
             }, {
                 onSuccess: async ({ data }) => {
                     if (data.status == 'error') {
@@ -52,14 +52,15 @@ const Otp = () => {
                         })
                     } else {
                         const trx = data?.data?.trx
-                        
                         data.message.success.forEach((message) => {
                             notifySuccess(message)
                         })
                         if (section && action) {
-                            const { data } = await axiosInstance.get(`/${section}/${action}/${trx}`)
-                            dispatch(setWithdrawPreviewData(data.data))
-                            navigate(`/dashboard/${section}/${action}/${trx}`)
+                            if (section == 'withdraw') {
+                                const { data } = await axiosInstance.get(`/${section}/${action}/${trx}`)
+                                dispatch(setWithdrawPreviewData(data.data))
+                            }
+                            navigate(`/dashboard/${section}/${action}/${optional}/${trx}`)
                             return;
                         }
                         navigate(-1)
@@ -82,7 +83,7 @@ const Otp = () => {
                                     <div className="d-flex justify-content-center mb-3">
                                         <div className="expired-time-circle">
                                             <div className="exp-time">{secondsLeft}</div>
-                                                Seconds
+                                            Seconds
                                             <div className="animation-circle"></div>
                                         </div>
                                         <div className="border-circle"></div>

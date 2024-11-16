@@ -76,7 +76,7 @@ const App = () => {
           <WithdrawPreview />
         </PrivateRoute>
       } />
-      <Route path="/otp-verification/:id/:section?/:action?" element={
+      <Route path="/otp-verification/:id/:section?/:action?/:optional?" element={
         <PrivateRoute>
           <Otp />
         </PrivateRoute>

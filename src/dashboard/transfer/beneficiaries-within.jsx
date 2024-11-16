@@ -132,7 +132,6 @@ const BeneficiariesWithin = () => {
                         <table className="table table--responsive--md">
                             <thead>
                                 <tr>
-                                    <th>Bank</th>
                                     <th>Account No.</th>
                                     <th>Account Name</th>
                                     <th>Short Name</th>
@@ -141,9 +140,8 @@ const BeneficiariesWithin = () => {
                             </thead>
                             <tbody>
                                 {
-                                    beneficiaries.beneficiaries.data.length > 0 && beneficiaries.beneficiaries.data.map((benefit, index) => (
+                                    beneficiaries?.beneficiaries?.data?.length > 0 && beneficiaries.beneficiaries.data.map((benefit, index) => (
                                         <tr key={index}>
-                                            <td>{benefit.bank_name}</td>
                                             <td>{benefit.account_number}</td>
                                             <td>{benefit.account_name}</td>
                                             <td>{benefit.short_name}</td>

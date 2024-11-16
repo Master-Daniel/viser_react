@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import MasterLayout from '../../layout/MasterLayout'
 import { useDispatch, useSelector } from 'react-redux';
 import { setModalVisible, setPageTitle } from '../../lib/redux/slices/global';
@@ -18,8 +18,10 @@ const WithinTransfer = () => {
     const [beneficiaries, setBeneficiaries] = useState([])
     const [accountNumber, setAccountNumber] = useState('')
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleClick = (accountNumber) => {
+        console.log(accountNumber)
         setAccountNumber(accountNumber)
         dispatch(setModalVisible(true));
     };
@@ -30,6 +32,7 @@ const WithinTransfer = () => {
 
     const { refetch } = useQuery('get-own-beneficiaries', UserApi.getOwnBeneficiaries, {
         onSuccess: ({ data }) => {
+            console.log(data.data.beneficiaries)
             setBeneficiaries(data.data)
         }
     })
@@ -56,6 +59,7 @@ const WithinTransfer = () => {
                 data: values
             }, {
                 onSuccess: ({ data }) => {
+                    console.log(data)
                     if (data.status == 'error') {
                         data.message.error.forEach((error) => {
                             notifyError(error)
@@ -65,6 +69,7 @@ const WithinTransfer = () => {
                             notifySuccess(message)
                         })
                         handleClose()
+                        navigate(`/otp-verification/${data.data.otpId}/own/transfer/confirm`);
                     }
                 }
             })
@@ -86,7 +91,6 @@ const WithinTransfer = () => {
                         <table className="table table--responsive--md">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
                                     <th>Account No.</th>
                                     <th>Account Name</th>
                                     <th>Details</th>
@@ -94,13 +98,12 @@ const WithinTransfer = () => {
                             </thead>
                             <tbody>
                                 {
-                                    beneficiaries.data?.beneficiaries?.data?.length > 0 && beneficiaries.data?.beneficiaries?.data.map((benefit, index) => (
+                                    beneficiaries?.beneficiaries?.data?.length > 0 && beneficiaries?.beneficiaries?.data.map((benefit, index) => (
                                         <tr key={index}>
-                                            <td>{benefit.name}</td>
                                             <td>{benefit.account_number} </td>
                                             <td>{benefit.account_name}</td>
                                             <td>
-                                                <button className="btn btn--sm btn-outline--base sendBtn" onClick={() => handleClick(benefit.account_number)} data-id="1">
+                                                <button className="btn btn--sm btn-outline--base sendBtn" onClick={() => handleClick(benefit.id)} data-id="1">
                                                     <i className="las la-hand-holding-usd"></i> Transfer Money
                                                 </button>
                                             </td>

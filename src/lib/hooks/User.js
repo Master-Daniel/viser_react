@@ -52,6 +52,7 @@ export const UserApi = {
     },
     
     transferWithin: async (formData) => {
+        console.log(formData)
         return await axiosInstance.post(`/own/transfer/request/${formData.id}`, formData.data)
     },
     
@@ -68,7 +69,9 @@ export const UserApi = {
     },
     
     wireTransfer: async (formData) => {
-        return await axiosInstance.post('/wire-transfer/request', formData)
+        return await axiosInstance.post('/wire-transfer/request', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
     },
     
     loanApplication: async (form) => {
