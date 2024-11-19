@@ -147,7 +147,7 @@ const WithinTransfer = () => {
                                         className={`select form--control ${transferForm.errors.auth_mode && transferForm.touched.auth_mode ? 'border border-danger' : ''}`}>
                                         <option disabled selected value="">Select One</option>
                                         <option value="email">Email</option>
-                                        <option value="sms">SMS</option>
+                                        {/* <option value="sms">SMS</option> */}
                                     </select>
                                 </div>
                                 <div className="my-4">

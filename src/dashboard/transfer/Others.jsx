@@ -177,7 +177,7 @@ const Others = () => {
                                             <select name="auth_mode" id="verification" className="form--control select" required>
                                                 <option disabled selected value="">Select One</option>
                                                 <option value="email">Email</option>
-                                                <option value="sms">SMS</option>
+                                                {/* <option value="sms">SMS</option> */}
                                             </select>
                                         </div>
                                         <button className="btn w-100 btn--base" type="submit">Submit</button>

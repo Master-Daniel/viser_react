@@ -18,6 +18,8 @@ const Otp = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        console.log(id, section, action, optional )
+        
         const timer = setInterval(() => {
             setSecondsLeft((prevSecondsLeft) => {
                 if (prevSecondsLeft <= 1) {
@@ -29,6 +31,8 @@ const Otp = () => {
         }, 1000);
 
         return () => clearInterval(timer);
+
+        
     }, []);
 
     const { mutate, isLoading } = useMutation('otp-verify', UserApi.otpVerify)
@@ -60,7 +64,7 @@ const Otp = () => {
                                 const { data } = await axiosInstance.get(`/${section}/${action}/${trx}`)
                                 dispatch(setWithdrawPreviewData(data.data))
                             }
-                            navigate(`/dashboard/${section}/${action}/${optional}/${trx}`)
+                            navigate(`/dashboard/${section}/${action}/${trx}`)
                             return;
                         }
                         navigate(-1)

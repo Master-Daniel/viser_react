@@ -78,6 +78,7 @@ const NewTicket = () => {
                                             name="priority"
                                             className={`form--control ${ticketForm.errors.priority && ticketForm.touched.priority ? 'border border-danger' : ''}`}
                                         >
+                                            <option disabled={true} value="">--Select Priority--</option>
                                             <option value="3">High</option>
                                             <option value="2">Medium</option>
                                             <option value="1">Low</option>
@@ -94,17 +95,6 @@ const NewTicket = () => {
                                             rows="6"
                                             className={`form--control ${ticketForm.errors.message && ticketForm.touched.message ? 'border border-danger' : ''}`}
                                         ></textarea>
-                                    </div>
-                                    <div className="col-md-9">
-                                        <input
-                                            onChange={ticketForm.handleChange}
-                                            onBlur={ticketForm.handleBlur}
-                                            value={ticketForm.values.image}
-                                            type="file" id='file' name="attachment" className='d-none' />
-                                        <button type="button" onClick={() => document.getElementById('file').click()} className="btn btn--dark addAttachment my-2"> <i className="fas fa-plus"></i> Add Attachment </button>
-                                        <p className="mb-2"><span className="text--info">Max 5 files can be uploaded | Maximum upload size is 256MB | Allowed File Extensions: .jpg, .jpeg, .png, .pdf, .doc, .docx</span></p>
-                                        <div className="row fileUploadsContainer"></div>
-                                        <p className='text-danger'>{ticketForm.errors.image}</p>
                                     </div>
                                     <div className="col-md-3">
                                         <button className="btn btn--base w-100 my-2" type="submit" disabled={isLoading}>
