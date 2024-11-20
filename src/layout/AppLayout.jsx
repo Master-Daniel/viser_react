@@ -9,7 +9,7 @@ const AppLayout = ({ children }) => {
         if (preloader) {
             setTimeout(() => {
                 preloader.style.display = 'none';
-            }, 5000)
+            }, 1000)
         }
     }, []);
 

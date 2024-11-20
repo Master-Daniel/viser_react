@@ -9,6 +9,7 @@ import { notifyError, notifySuccess } from '../../util/custom-functions'
 import { useFormik } from 'formik'
 import * as Yup from 'yup';
 import { CircularProgress } from "@mui/material";
+import Pfp from "../../assets/profile.png"
 
 const Profile = () => {
     const dispatch = useDispatch()
@@ -90,7 +91,7 @@ const Profile = () => {
                 <div className="col-xxl-3 col-xl-4 col-lg-5 col-md-5 d-none d-md-block">
                     <div className="section-bg">
                         <span className="text-center d-block profile-image-preview">
-                            <img src="https://script.viserlab.com/viserbank/demo/assets/images/user/profile/65b42a526ff2f1706306130.jpg" alt="image" className="man-thumb" />
+                            <img src={Pfp} alt="image" className="man-thumb" />
                         </span>
                         <ul className="user-info-card ">
                             <li className="user-info-card__list flex-align">

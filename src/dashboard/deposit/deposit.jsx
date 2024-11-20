@@ -102,7 +102,7 @@ const Deposit = () => {
                             <div className="row justify-content-center gy-sm-4 gy-3">
                                 <div className="col-xxl-4 col-xl-5">
                                     <div className="payment-system-list is-scrollable gateway-option-list">
-                                        {depositMethods.map((method, index) => (
+                                        {depositMethods?.map((method, index) => (
                                             <label key={index} htmlFor={`bank_${index}`} className="payment-item gateway-option">
                                                 <div className="payment-item__info">
                                                     <span className="payment-item__check"></span>

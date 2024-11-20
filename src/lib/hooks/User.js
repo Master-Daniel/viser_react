@@ -57,9 +57,16 @@ export const UserApi = {
     },
     
     addBeneficiary: async (formData) => {
-        return await axiosInstance.post('/beneficiary/own', formData)
+        return await axiosInstance.post('/beneficiary/own', formData, {
+            headers: { 'Content-Type': 'application/json' }
+        });
     },
     
+    
+    checkAccountNumber: async (number) => {
+        return await axiosInstance.get(`/beneficiary/account-number/check?account_number=${number}`)
+    },
+
     addOtherBeneficiary: async (formData) => {
         return await axiosInstance.post('/beneficiary/other', formData)
     },

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const DashboardCard = ({ title, amount, icon }) => {
     return (
         <div className="col-xl-4 col-lg-6 col-md-4 col-sm-6 col-xsm-6">
-            <Link to="{{ route('user.deposit.history') }}?status={{ Status::PAYMENT_PENDING }}" className="d-block">
+            <Link to="#" className="d-block">
                 <div className="dashboard-widget">
                     <div className="dashboard-widget__content flex-align">
                         <span className="dashboard-widget__icon flex-center">

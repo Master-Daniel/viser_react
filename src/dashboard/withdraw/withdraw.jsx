@@ -192,7 +192,7 @@ const Withdraw = () => {
                                                 >
                                                     <option disabled selected value="">Select One</option>
                                                     <option value="email">Email</option>
-                                                    <option value="sms">SMS</option>
+                                                    {/* <option value="sms">SMS</option> */}
                                                 </select>
                                             </div>
                                         </div>
