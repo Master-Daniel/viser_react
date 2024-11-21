@@ -32,6 +32,7 @@ import WithdrawPreview from './dashboard/withdraw/preview';
 import ConfirmWireTransfer from './dashboard/transfer/confirmWireTransfer';
 import BeneficiariesOthers from './dashboard/transfer/beneficiaries-others';
 import ViewTicket from './dashboard/support/viewTicket';
+import ForgottenPassword from './ForgottenPassword';
 
 const App = () => {
   return (
@@ -39,6 +40,11 @@ const App = () => {
       <Route path="/" element={
         <PublicRoute>
           <Login />
+        </PublicRoute>
+      } />
+      <Route path="/forgotten-password" element={
+        <PublicRoute>
+          <ForgottenPassword />
         </PublicRoute>
       } />
       <Route path="/register" element={

@@ -43,6 +43,18 @@ export const UserApi = {
         return await axiosInstance.post('/change-password', formData)
     },
     
+    forgottenPassword: async (formData) => {
+        return await axiosInstance.post('/password/email', formData)
+    },
+    
+    passwordOtp: async (formData) => {
+        return await axiosInstance.post('/password/verify-code', formData)
+    },
+    
+    resetPassword: async (formData) => {
+        return await axiosInstance.post('/password/reset', formData)
+    },
+    
     storeWithDraw: async (formData) => {
         return await axiosInstance.post(`/withdraw-request/confirm/${formData.trx}`, formData.data)
     },
