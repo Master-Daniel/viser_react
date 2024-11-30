@@ -54,7 +54,6 @@ const ForgottenPassword = () => {
         }),
         onSubmit: values => {
             values.email = email
-            console.log(values)
             otpMutate(values, {
                 onSuccess: ({ data }) => {
                     if (data.status == 'success') {
@@ -62,7 +61,7 @@ const ForgottenPassword = () => {
                             notifySuccess(message)
                         })
                         setState(2)
-                        setToken(data?.data?.token)
+                        setToken(values.code)
                     } else if (data.status == 'error') {
                         data.message.error.forEach((error) => {
                             notifyError(error)
