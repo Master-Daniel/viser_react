@@ -9,7 +9,6 @@ import { notifyError, notifySuccess } from '../../util/custom-functions'
 import { useFormik } from 'formik'
 import * as Yup from 'yup';
 import { CircularProgress } from "@mui/material";
-import Pfp from "../../assets/profile.png"
 
 const Profile = () => {
     const dispatch = useDispatch()
