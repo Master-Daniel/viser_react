@@ -89,10 +89,10 @@ const Profile = () => {
     return (
         <MasterLayout>
             <div className="row gy-4 justify-content-center ">
-                <div className="col-xxl-3 col-xl-4 col-lg-5 col-md-5 d-none d-md-block">
+                <div className="col-xxl-3 col-xl-4 col-lg-5 col-md-5 d-md-block">
                     <div className="section-bg">
                         <span className="text-center d-block profile-image-preview">
-                            <img src={`${import.meta.env.VITE_BASE_URL}/assets/images/user/profile/${profile.image}`} alt="image" className="man-thumb" />
+                            <img src={`${import.meta.env.VITE_BASE_URL}/assets/images/user/profile/${profile.image}`} alt="image" style={{borderRadius: "50%"}} className="man-thumb" />
                         </span>
                         <ul className="user-info-card ">
                             <li className="user-info-card__list flex-align">

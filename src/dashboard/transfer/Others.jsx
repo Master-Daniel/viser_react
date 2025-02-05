@@ -71,7 +71,7 @@ const Others = () => {
                             </thead>
                             <tbody>
                                 {
-                                    beneficiaries.data?.beneficiaries?.data?.length > 0 && beneficiaries.data?.beneficiaries?.data.map((benefit, index) => (
+                                    beneficiaries?.data?.beneficiaries?.data?.length > 0 && beneficiaries.data?.beneficiaries?.data.map((benefit, index) => (
                                         <tr key={index}>
                                             <td>{benefit.name}</td>
                                             <td>{benefit.account_name}</td>
