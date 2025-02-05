@@ -4723,3 +4723,21 @@ table th {
   align-items: center;
   gap: 5px;
 }
+
+.sidebar-menu {
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-menu.closed {
+  transform: translateX(-100%);
+}
+
+.sidebar-menu.open {
+  transform: translateX(0);
+}
+
+@media (min-width: 992px) {
+  .sidebar-menu {
+      transform: translateX(0);
+  }
+}

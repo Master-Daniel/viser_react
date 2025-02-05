@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    isMenuOpen: false,
     isLoggedIn: false,
     isModalVisible: false,
     pageTitle: "",
@@ -15,6 +16,9 @@ export const globalSlice = createSlice({
     name: "global",
     initialState,
     reducers: {
+        toggleMenu: (state) => {
+            state.isMenuOpen = !state.isMenuOpen;
+        },
         setIsLoggedIn: (state, action) => {
             state.isLoggedIn = action.payload;
         },
@@ -47,6 +51,7 @@ export const {
     setModalVisible,
     setPageTitle,
     setProfile,
+    toggleMenu,
     setLoanPlan,
     setDepositDetails,
     setDepositMethods,

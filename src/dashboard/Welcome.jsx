@@ -55,6 +55,12 @@ const Welcome = () => {
         <MasterLayout>
             <div className="row gy-lg-4 gy-md-3 gy-3 align-items-center">
 
+                {
+                    dashboardData.status == 'error' && <div className="alert col-lg-12 alert-info" role="alert">
+                        {dashboardData.message.error[0]}
+                    </div>
+                }
+
                 <div className="col-xl-4 col-lg-6 col-md-4 col-sm-6">
                     <Link to="/dashboard/transactions" className="d-block">
                         <div className="dashboard-widget ballance">

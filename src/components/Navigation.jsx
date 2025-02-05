@@ -1,14 +1,16 @@
-import { useDispatch } from "react-redux"
-import { setIsLoggedIn } from "../lib/redux/slices/global"
+import { useDispatch, useSelector } from "react-redux"
+import { toggleMenu, setIsLoggedIn } from "../lib/redux/slices/global"
 import { Link, useLocation } from "react-router-dom"
 import { notifyError, notifySuccess } from "../util/custom-functions"
 import { useMutation } from "react-query"
 import { AuthApi } from "../lib/hooks/Auth"
+import { useEffect } from "react"
 
 const Navigation = () => {
 
     const dispatch = useDispatch()
     const location = useLocation()
+    const { isMenuOpen } = useSelector((state) => state.global);
     
     const { mutate } = useMutation("logout", AuthApi.logout);;
 
@@ -24,16 +26,30 @@ const Navigation = () => {
         })
     }
 
+    useEffect(() => {
+        if (window.innerWidth >= 992) {
+            dispatch(toggleMenu(true)); // Ensure sidebar opens on desktop
+        }
+    }, []);
+    
+
     const menuActive = (path) => {
         return location.pathname.includes(path) ? 'active' : '';
     };
 
+    const isDesktop = window.innerWidth >= 992;
+
     return (
-        <div className="sidebar-menu flex-between">
+        <div className={`sidebar-menu flex-between ${isMenuOpen || isDesktop ? "open" : "closed"} d-lg-block`}>
             <div className="sidebar-menu__inner">
-                <span className="sidebar-menu__close d-lg-none d-block flex-between"><i className="fas fa-times"></i></span>
+                {/* Close button toggles menu */}
+                <span className="sidebar-menu__close d-lg-none d-block flex-between" onClick={() => dispatch(toggleMenu())}>
+                    <i className="fas fa-times"></i>
+                </span>
                 <div className="sidebar-logo">
-                    <Link to="/dashboard/welcome" className="sidebar-logo__link"><img src="/assets/images/blue-logo.png" alt="" /></Link>
+                    <Link to="/dashboard/welcome" className="sidebar-logo__link">
+                        <img src="/assets/images/blue-logo.png" alt="" />
+                    </Link>
                 </div>
                 <ul className="sidebar-menu-list">
                     <li className="menu-title pt-0">MENU</li>
