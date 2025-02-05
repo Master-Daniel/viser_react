@@ -2,7 +2,7 @@ import axios from 'axios';
 import axiosRateLimit from 'axios-rate-limit';
 
 const axiosInstance = axiosRateLimit(axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL,
+    baseURL: import.meta.env.VITE_API_URL,
     timeout: 10000,
 }), { maxRPS: 5 });
 
