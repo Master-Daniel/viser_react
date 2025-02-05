@@ -22,9 +22,9 @@ const Withdraw = () => {
 
     const { refetch } = useQuery("withdraw-methods", UserApi.withdrawMethods, {
         onSuccess: ({ data }) => {
-            setMethods(data.data.withdraw_method);
-            if (data.data.withdraw_method.length > 0) {
-                setSelectedGateway(data.data.withdraw_method[0]); // Default to the first gateway
+            setMethods(data?.data?.withdraw_method);
+            if (data?.data?.withdraw_method?.length > 0) {
+                setSelectedGateway(data?.data?.withdraw_method[0]); // Default to the first gateway
             }
         },
         refetchOnWindowFocus: false,
@@ -108,11 +108,11 @@ const Withdraw = () => {
                             <div className="row justify-content-center gy-sm-4 gy-3">
                                 <div className="col-xxl-4 col-xl-5">
                                     <div className="payment-system-list is-scrollable gateway-option-list">
-                                        {methods.map((method) => (
+                                        {methods?.map((method) => (
                                             <label key={method.id} className="payment-item gateway-option">
                                                 <div className="payment-item__info">
                                                     <span className="payment-item__check"></span>
-                                                    <span className="payment-item__name">{method.name}</span>
+                                                    <span className="payment-item__name">{method?.name}</span>
                                                 </div>
                                                 <input
                                                     type="radio"
@@ -128,7 +128,7 @@ const Withdraw = () => {
                                 <div className="col-xxl-6 col-xl-7">
                                     <div className="card custom--card mb-3">
                                         <div className="card-body">
-                                            <h6 className="mb-3 text-end">Current Balance: {profile.balance}</h6>
+                                            <h6 className="mb-3 text-end">Current Balance: {profile?.balance}</h6>
                                             <div className="input-group">
                                                 <span className="input-group-text">$</span>
                                                 <input
