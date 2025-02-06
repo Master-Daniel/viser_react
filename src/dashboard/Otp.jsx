@@ -46,8 +46,8 @@ const Otp = () => {
         }),
         onSubmit: values => {
             mutate({
-                url: `/check/otp/${id}`,
-                data: { ...values }
+                url: id == 'welcome' ? '/verify-email' : `/check/otp/${id}`,
+                data: { ...values, code: values.otp }
             }, {
                 onSuccess: async ({ data }) => {
                     if (data.status == 'error') {
@@ -55,11 +55,11 @@ const Otp = () => {
                             notifyError(error)
                         })
                     } else {
-                        const trx = data?.data?.trx
                         data.message.success.forEach((message) => {
                             notifySuccess(message)
                         })
                         if (section && action) {
+                            const trx = data?.data?.trx
                             if (section == 'withdraw') {
                                 const { data } = await axiosInstance.get(`/${section}/${action}/${trx}`)
                                 dispatch(setWithdrawPreviewData(data.data))
@@ -82,16 +82,16 @@ const Otp = () => {
                         <div className="verification-code-wrapper custom--card">
                             <div className="verification-area">
                                 <div className="text-center mb-4 card-img-top bg--dark p-3">
-                                    <p className="text-white">Please check your mobile to get a six digit OTP</p>
-                                    <p className="mt-2 text--warning otp-warning">OTP will be expired in the next</p>
-                                    <div className="d-flex justify-content-center mb-3">
+                                    <p className="text-white">Please check your phone or email to get a six digit OTP</p>
+                                    {/* <p className="mt-2 text--warning otp-warning">OTP will be expired in the next</p> */}
+                                    {/* <div className="d-flex justify-content-center mb-3">
                                         <div className="expired-time-circle">
                                             <div className="exp-time">{secondsLeft}</div>
                                             Seconds
                                             <div className="animation-circle"></div>
                                         </div>
                                         <div className="border-circle"></div>
-                                    </div>
+                                    </div> */}
 
                                     <div className="try-btn-wrapper mt-2 d-none">
                                         <p className="text--danger">Your OTP has been expired </p>

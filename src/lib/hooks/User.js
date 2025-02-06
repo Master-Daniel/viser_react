@@ -167,5 +167,9 @@ export const UserApi = {
     
     withdrawHistory: async () => {
         return await axiosInstance.get('/withdraw/history')
-    }
+    },
+
+    resendVerificationCode: async (type) => {
+        return await axiosInstance.get(`/resend-verify/${type}`)
+    },
 }
